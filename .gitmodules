@@ -1,0 +1,21 @@
+[submodule "external/Leaflet-GeoMixer"]
+	path = external/Leaflet-GeoMixer
+	url = git@github.com:ScanEx/Leaflet-GeoMixer.git
+[submodule "external/gmxControls"]
+	path = external/gmxControls
+	url = git@github.com:ScanEx/gmxControls.git
+[submodule "external/gmxDrawing"]
+	path = external/gmxDrawing
+	url = git@github.com:ScanEx/gmxDrawing.git
+[submodule "external/Leaflet.imageTransform"]
+	path = external/Leaflet.imageTransform
+	url = git@github.com:ScanEx/Leaflet.imageTransform.git
+[submodule "external/Leaflet.gmxBaseLayersManager"]
+	path = external/Leaflet.gmxBaseLayersManager
+	url = git@github.com:OriginalSin/Leaflet.gmxBaseLayersManager.git
+[submodule "external/Leaflet.TileLayer.Mercator"]
+	path = external/Leaflet.TileLayer.Mercator
+	url = git@github.com:OriginalSin/Leaflet.TileLayer.Mercator.git
+[submodule "external/L.GmxGrid"]
+	path = external/L.GmxGrid
+	url = git@github.com:OriginalSin/L.GmxGrid.git
