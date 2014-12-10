@@ -11,6 +11,7 @@
     "external/Leaflet-GeoMixer/src/gmxObserver.js",
     "external/Leaflet-GeoMixer/src/LabelsLayer.js",
     "external/Leaflet-GeoMixer/src/gmxAPIutils.js",
+    "external/Leaflet-GeoMixer/src/gmxDrawCanvas.js",
     "external/Leaflet-GeoMixer/src/gmxImageTransform.js",
     "external/Leaflet-GeoMixer/src/SessionManager.js",
     "external/Leaflet-GeoMixer/src/MapManager.js",
