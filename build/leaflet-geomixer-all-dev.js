@@ -6,7 +6,7 @@
 		for (var i = 0; i < scripts.length; i++) {
 			var src = scripts[i].src;
 			if (src) {
-				var res = src.match(/^(.*)apiv2-dev\.js/);
+				var res = src.match(/^(.*)leaflet-geomixer-all-dev\.js/);
 				if (res) {
 					return res[1];
 				}

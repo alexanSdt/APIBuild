@@ -30,7 +30,7 @@ exports.build = function () {
 	var intro = '(function () {\n"use strict";\n',
 	    outro = '}());',
 	    newSrc = intro + combineFiles(depsJS) + outro,
-	    pathPart = 'dist/apiv2',
+	    pathPart = 'dist/leaflet-geomixer-all',
 	    srcPath = pathPart + '-src.js';
 
 	console.log('\tUncompressed size: ' + newSrc.length + ' bytes');
@@ -55,7 +55,7 @@ exports.build = function () {
 	ncp('external/gmxControls/src/css/img', 'dist/css/img');
 
 	var newSrc = combineFiles(depsCSS),
-	    pathPart = 'dist/css/apiv2',
+	    pathPart = 'dist/css/leaflet-geomixer-all',
 	    srcPath = pathPart + '.css';
 
 	console.log('\tCSS size: ' + newSrc.length + ' bytes');
