@@ -122,13 +122,16 @@
                         .setLatLng(this.options.center)
                         .setContent(txt)
                         .openOn(this.map);
-                        
+
                     var layer = gmxMap.layersByID['5B6E92750658420C9CEB25F5408E02FA'];
                     layer.setZIndex(-500000);
                     var tmap = layer._map;
 
-                    layer = gmxMap.layersByID['8E4D6AD953F94A7CAACBFA5B01E09B8D'];
-                    if (layer && tmap) tmap.gmxLayersControl.addOverlay(layer, 'Затопленные жилые хозяйственные зоны');
+                    layer = gmxMap.layersByID['03CBA68FAC6F4E0DB6B5A63D4EA121B4'];
+                    if (layer && tmap) {
+                        var title = layer._gmx.properties.title || 'unknown layer'; // 'Затопленные жилые хозяйственные зоны'
+                        tmap.gmxLayersControl.addOverlay(layer, title);
+                    }
                 }
             }
         };
@@ -156,8 +159,6 @@
                 L.gmx.loadMap(attr.id, {leafletMap: map, setZIndex: true, apiKey: 'E5FB6CCB5D23B5E119D2F1B26BCC57BD'}).then(function(gmxMap) {
                     var blm = map.gmxBaseLayersManager;
                         mapProp = gmxMap.properties;
-
-                    map.setView(new L.LatLng(mapProp.DefaultLat, mapProp.DefaultLong), mapProp.DefaultZoom);
                     
                     //инициализируем контролы ГеоМиксера
                     map.addControl(L.control.gmxBottom())
@@ -175,6 +176,8 @@
                     //добавляем кастомные балуны и начальные настройки карты
                     if (attr.bindPopup) attr.bindPopup(gmxMap);
                     if (attr.init) attr.init(gmxMap, map);
+
+                    map.setView(new L.LatLng(mapProp.DefaultLat, mapProp.DefaultLong), mapProp.DefaultZoom);
                 });
             }
         };
