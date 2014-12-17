@@ -171,7 +171,8 @@
                         var baseLayers = mapProp.BaseLayers,
                             currentID = mapProp.currentID || baseLayers[0];
                             
-                        blm.setActiveIDs(baseLayers).setCurrentID(currentID);
+                        blm.setActiveIDs(baseLayers);
+                        if (currentID) blm.setCurrentID(currentID);
                     });
                     //добавляем кастомные балуны и начальные настройки карты
                     if (attr.bindPopup) attr.bindPopup(gmxMap);
