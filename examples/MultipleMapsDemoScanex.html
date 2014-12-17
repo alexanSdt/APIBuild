@@ -55,12 +55,27 @@
             ndvi: { // Мониторинг объектов сельского хозяйства с использованием NDVI
                 id: 'YIT5H',
                 init: function(gmxMap, map) {
-                    map.gmxLayersControl
-                        .addOverlay(gmxMap.layersByID['4B0FF7405E1040E39E2AFDAF9AEAC990'], 'NDVI на 08-11-2012')
-                        .addOverlay(gmxMap.layersByID['560535FE786F4D88A8CA46CEA164190F'], 'NDVI на 10-09-2012')
-                        .addOverlay(gmxMap.layersByID['076F16BAE008401481F1C3D08B2A13DA'], 'NDVI на 11-07-2012')
-                        .addOverlay(gmxMap.layersByID['3B26229BAF7D4AC69EE4433590ED9320'], 'NDVI на 13-05-2012')
-                        .addOverlay(gmxMap.layersByID['F23AFE96288243C3ACBC395F354FCF79'], 'NDVI на 02-04-2012')
+                    var ndviLayers = {
+                        'NDVI на 08-11-2012': gmxMap.layersByID['4B0FF7405E1040E39E2AFDAF9AEAC990'],
+                        'NDVI на 10-09-2012': gmxMap.layersByID['560535FE786F4D88A8CA46CEA164190F'],
+                        'NDVI на 11-07-2012': gmxMap.layersByID['076F16BAE008401481F1C3D08B2A13DA'],
+                        'NDVI на 13-05-2012': gmxMap.layersByID['3B26229BAF7D4AC69EE4433590ED9320'],
+                        'NDVI на 02-04-2012': gmxMap.layersByID['F23AFE96288243C3ACBC395F354FCF79']
+                    };
+                    for (var name in ndviLayers) {
+                        map.gmxLayersControl.addOverlay(ndviLayers[name], name);
+                    }
+                    map.on('overlayadd', function(ev) {
+                        var current = ev.name;
+                        setTimeout(function () {
+                            for (var name in ndviLayers) {
+                                if (current !== name) {
+                                    map.gmxLayersControl.unSetActiveBaseLayer(name);
+                                    //map.gmxLayersControl.activeBaseLayerInput.checked = false;
+                                }
+                            }
+                        }, 0);
+                    });
                 },
                 options: { attributionControl: false, scrollWheelZoom: false, zoom: 11, center: new L.LatLng(54.61028, 82.221679) }
             },
