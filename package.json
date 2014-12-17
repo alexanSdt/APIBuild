@@ -1,14 +1,19 @@
 {
-	"name": "APIv2",
-	"version": "0.0.1",
-	"description": "GeoMixer API for Leaflet",
-	"devDependencies": {
-		"uglify-js": "~2.3.6",
-		"jake": "~0.5.16"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/ScanEx/Leaflet-GeoMixer.git"
-	},
-	"keywords": ["gis", "leaflet", "geomixer"]
+  "name": "APIv2",
+  "version": "0.0.1",
+  "description": "GeoMixer API for Leaflet",
+  "devDependencies": {
+    "jake": "~0.5.16",
+    "ncp": "^1.0.1",
+    "uglify-js": "~2.3.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ScanEx/Leaflet-GeoMixer.git"
+  },
+  "keywords": [
+    "gis",
+    "leaflet",
+    "geomixer"
+  ]
 }
