@@ -16,3 +16,6 @@
 [submodule "external/Leaflet.TileLayer.Mercator"]
 	path = external/Leaflet.TileLayer.Mercator
 	url = git@github.com:OriginalSin/Leaflet.TileLayer.Mercator.git
+[submodule "external/L.GmxGrid"]
+	path = external/L.GmxGrid
+	url = git@github.com:OriginalSin/L.GmxGrid.git
