@@ -13,9 +13,6 @@
 [submodule "external/Leaflet.gmxBaseLayersManager"]
 	path = external/Leaflet.gmxBaseLayersManager
 	url = git@github.com:OriginalSin/Leaflet.gmxBaseLayersManager.git
-[submodule "external/L.GmxGrid.git"]
-	path = external/L.GmxGrid.git
-	url = git@github.com:OriginalSin/L.GmxGrid.git
 [submodule "external/Leaflet.TileLayer.Mercator"]
 	path = external/Leaflet.TileLayer.Mercator
 	url = git@github.com:OriginalSin/Leaflet.TileLayer.Mercator.git
