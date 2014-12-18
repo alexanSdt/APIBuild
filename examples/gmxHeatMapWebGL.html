@@ -62,7 +62,7 @@
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
         }).addTo(map);
 
-        var heatmap = new L.HeatMapWebGL(map, {size: 1000, autoresize: true}); 
+        var heatmap = new L.HeatMapWebGL(map, {alphaRange: 0.2}); 
         map.addLayer(heatmap);
 
         var updateInfo = function(currentDate) {
