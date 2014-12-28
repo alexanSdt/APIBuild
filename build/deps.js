@@ -50,7 +50,7 @@
     ,
     "external/Leaflet.imageTransform/src/L.ImageTransform.js"
     ,
-    "external/L.GmxGrid/src/L.GmxGrid.js"
+    "external/Leaflet.gmxGrid/src/Leaflet.gmxGrid.js"
 ];
 var depsCSS = [
     "external/gmxControls/src/css/L.Control.gmxIcon.css",
