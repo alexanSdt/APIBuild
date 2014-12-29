@@ -6,13 +6,6 @@ API version 2 builder
 # Примеры использования Leaflet плагинов
   * [Notable Leaflet Plugins](http://leafletjs.com/plugins.html) - Leaflet плагины.
 
-Пример|Описание|Примечание
-------|---------|-----------
-[gmxHeatMapWebGL.html](http://originalsin.github.io/buildAPIV2/examples/gmxHeatMapWebGL.html)| [WebGL Heatmap](http://leafletjs.com/plugins.html)| High performance Javascript heatmap plugin using WebGL
-[restoreView.html](http://originalsin.github.io/buildAPIV2/examples/restoreView.html)| [Leaflet.RestoreView](https://github.com/makinacorpus/Leaflet.RestoreView)| Stores and restores map view using localStorage.
-[testIframe.html](http://kosmosnimki.ru/demo/testIframe.html)| Листание карт|
-[testDrawingObjectsListWidget.html](http://originalsin.github.io/buildAPIV2/examples/testDrawingObjectsListWidget.html)|Подключение виджета drawing objects.
-
 Build
 ------
 
