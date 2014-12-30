@@ -3,8 +3,7 @@ buildAPIV2
 
 API version 2 builder
 
-# Примеры использования Leaflet плагинов
-  * [Notable Leaflet Plugins](http://leafletjs.com/plugins.html) - Leaflet плагины.
+# Пример сборки плагинов Геомиксера
 
 Build
 ------
