@@ -31,11 +31,15 @@
         }
     </style>
  
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 
+<!--
+    <script src="externals/leaflet.js"></script>
+    <link rel="stylesheet" href="externals/leaflet.css" />
     <script src="http://kosmosnimki.ru/demo/apiv2/leaflet-geomixer-all-src.js?key=E5FB6CCB5D23B5E119D2F1B26BCC57BD"></script>
-<!--    <script src="../build/leaflet-geomixer-all-dev.js?key=E5FB6CCB5D23B5E119D2F1B26BCC57BD"></script> -->
+ -->
+    <script src="../build/leaflet-geomixer-all-dev.js?key=E5FB6CCB5D23B5E119D2F1B26BCC57BD"></script>
     <link rel="stylesheet" href="http://kosmosnimki.ru/demo/apiv2/css/leaflet-geomixer-all.css" />
 </head>
 <body>
@@ -100,7 +104,7 @@
                 }
             },
             ndvi: { // Мониторинг объектов сельского хозяйства с использованием NDVI
-                id: 'YIT5H',
+                id: 'YIT5H',  //'CE8C2CAC71E744978F04E4EE57C745FC', //
                 afterInitBaseLayers: function(gmxMap, map, mapProp) {
                     var blm = map.gmxBaseLayersManager,
                         hybrid = blm.get('hybrid'),
@@ -132,7 +136,7 @@
                     blm.setCurrentID(activeIDs[1]);
                     hybridLayers[1].addTo(map);
                 },
-                options: { attributionControl: false, zoomControl: false, scrollWheelZoom: false, zoom: 11, center: new L.LatLng(54.61028, 82.221679) }
+                options: { attributionControl: false, zoomControl: false, scrollWheelZoom: false, zoom: 11, center: new L.LatLng(54.590566, 82.160911) }
             },
             mosoblkult: { // Интерактивная карта объектов природного наследия
                 id: '6VYUE'
@@ -249,6 +253,7 @@
                     var blm = map.gmxBaseLayersManager;
                         mapProp = gmxMap.properties;
                     
+                    attr.gmxMap = gmxMap;                    
                     //инициализируем контролы ГеоМиксера
                     map.addControl(L.control.gmxBottom())
                         .addControl(L.control.gmxZoom())
@@ -272,12 +277,32 @@
                     //добавляем кастомные балуны и начальные настройки карты
                     if (attr.bindPopup) attr.bindPopup(gmxMap);
                     if (attr.init) attr.init(gmxMap, map);
+                    
+                    var needMove = false,
+                        zoom = map.getZoom(),
+                        center = map.getCenter()
 
-                    map.setView(new L.LatLng(mapProp.DefaultLat, mapProp.DefaultLong), mapProp.DefaultZoom);
+                    if (mapProp.DefaultZoom && zoom !== mapProp.DefaultZoom) {
+                        needMove = true;
+                        zoom = mapProp.DefaultZoom;
+                    }
+                    if (mapProp.DefaultLat || mapProp.DefaultLong) {
+                        if (mapProp.DefaultLat && center.lat !== mapProp.DefaultLat) {
+                            needMove = true;
+                            center.lat = mapProp.DefaultLat;
+                        }
+                        if (mapProp.DefaultLong && center.lng !== mapProp.DefaultLong) {
+                            needMove = true;
+                            center.lng = mapProp.DefaultLong;
+                        }
+                    }
+                    if (needMove) {
+                        map.setView(center, zoom);
+                    }
                 });
             }
         };
-        showMap('ice');
+        showMap('ndvi');
 
         function listener(event){
             if (mapsIDs[event.data]) showMap(event.data);
