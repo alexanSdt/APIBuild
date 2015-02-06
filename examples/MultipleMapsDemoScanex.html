@@ -26,12 +26,16 @@
         .myName {
             text-align: left;
         }
+        .myName h3 {
+            text-align: center;
+        }
     </style>
  
     <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
 
     <script src="http://kosmosnimki.ru/demo/apiv2/leaflet-geomixer-all-src.js?key=E5FB6CCB5D23B5E119D2F1B26BCC57BD"></script>
+<!--    <script src="../build/leaflet-geomixer-all-dev.js?key=E5FB6CCB5D23B5E119D2F1B26BCC57BD"></script> -->
     <link rel="stylesheet" href="http://kosmosnimki.ru/demo/apiv2/css/leaflet-geomixer-all.css" />
 </head>
 <body>
@@ -39,82 +43,139 @@
     <div id="mapsContent"></div>
 
     <script>
+        var copyrights = {
+            collinsbartholomew: "&copy; <a href='http://www.collinsbartholomew.com/'>Collins Bartholomew Ltd.</a>"
+            ,openStreetMap: "&copy; участники OpenStreetMap <a href='http://www.openstreetmap.org/copyright'>ODbL</a>"
+            ,naturalearthdata: "&copy; <a href='http://www.naturalearthdata.com/'>Natural Earth</a>"
+        };
+        var getCopyright2 = function() {
+            return [
+                {minZoom: 1, maxZoom: 7, attribution: copyrights.collinsbartholomew + ', 2014'}
+                ,{minZoom: 1, maxZoom: 7, attribution: copyrights.naturalearthdata + ', 2013'}
+                ,{minZoom: 8, maxZoom: 17, attribution: copyrights.openStreetMap}
+            ];
+        }
+    
+        var getURL = function(type) {
+            return 'http://{s}.tile.cart.kosmosnimki.ru/' + type + '/{z}/{x}/{y}.png';
+        }
         var mapsIDs = {
             ice: {  // Оперативный спутниковый мониторинг судов с использованием данных АИС и ледовая разведка
                 id: 'D4BA4956CC2E4A818F0AC66F156C2713',
-                options: { attributionControl: false, scrollWheelZoom: false, zoom: 9, center: new L.LatLng(77.4389, 96.7125) }
+                options: { attributionControl: false, zoomControl: false, scrollWheelZoom: false, zoom: 9, center: new L.LatLng(77.4389, 96.7125) }
                 ,bindPopup: function(gmxMap) {
-                    var radarsat = gmxMap.layersByID['FF41BC58487847EE80CC516BFB145C6C'];
-                    if (radarsat && radarsat._map) radarsat._map.gmxLayersControl.addOverlay(radarsat, 'Radarsat-2');
-
                     // подключение балунов
                     var layer = gmxMap.layersByID['77269285D1D94509B2EAA9529449DF26'];
                     layer.bindPopup('', { maxWidth: 560 });
+                },
+                afterInitBaseLayers: function(gmxMap, map, mapProp) {
+                    var layer = gmxMap.layersByID['77269285D1D94509B2EAA9529449DF26'];
+                    map.gmxLayersControl.addOverlay(layer, 'Данные АИС');
+                    layer.setZIndex(2000112);
+
+                    var blm = map.gmxBaseLayersManager,
+                        hybrid = blm.get('hybrid'),
+                        hybridLayers = hybrid.getLayers();
+
+                    map.gmxLayersControl.removeLayer(hybrid);
+                    hybridLayers[0].addTo(map);
+                    
+                    var activeIDs = [],
+                        baseLayers = [
+                        { id: '9EDFB2CB13254D198E8CB6BC44BC1D3E', name: 'Radarsat-2 синтез каналов: HV, HH, HH-HV'},
+                        { id: '153DF37CEA1040058FD75980393668D8', name: 'Radarsat-2 поляризация HV'},
+                        { id: '48DBAEBCBE5948DBB952BC254DC181B5', name: 'Radarsat-2 поляризация HH'}
+                    ];
+                    baseLayers.map(function(it) {
+                        activeIDs.push(it.name);
+                        blm.add(it.name, {
+                            layers:[
+                                gmxMap.layersByID[it.id].setZIndex(500000)
+                            ]
+                        });
+                    });
+                    blm.setActiveIDs(activeIDs);
+                    blm.setCurrentID(activeIDs[0]);
+                    hybridLayers[1].addTo(map);
                 }
             },
             ndvi: { // Мониторинг объектов сельского хозяйства с использованием NDVI
                 id: 'YIT5H',
-                init: function(gmxMap, map) {
-                    var ndviLayers = {
-                        'NDVI на 08-11-2012': gmxMap.layersByID['4B0FF7405E1040E39E2AFDAF9AEAC990'],
-                        'NDVI на 10-09-2012': gmxMap.layersByID['560535FE786F4D88A8CA46CEA164190F'],
-                        'NDVI на 11-07-2012': gmxMap.layersByID['076F16BAE008401481F1C3D08B2A13DA'],
-                        'NDVI на 13-05-2012': gmxMap.layersByID['3B26229BAF7D4AC69EE4433590ED9320'],
-                        'NDVI на 02-04-2012': gmxMap.layersByID['F23AFE96288243C3ACBC395F354FCF79']
-                    };
-                    for (var name in ndviLayers) {
-                        map.gmxLayersControl.addOverlay(ndviLayers[name], name);
-                    }
-                    map.on('overlayadd', function(ev) {
-                        var current = ev.name;
-                        setTimeout(function () {
-                            for (var name in ndviLayers) {
-                                if (current !== name) {
-                                    map.gmxLayersControl.unSetActiveBaseLayer(name);
-                                    //map.gmxLayersControl.activeBaseLayerInput.checked = false;
-                                }
-                            }
-                        }, 0);
+                afterInitBaseLayers: function(gmxMap, map, mapProp) {
+                    var blm = map.gmxBaseLayersManager,
+                        hybrid = blm.get('hybrid'),
+                        hybridLayers = hybrid.getLayers();
+
+                    map.gmxLayersControl.removeLayer(hybrid);
+                    hybridLayers[0].addTo(map);
+
+                    gmxMap.layersByID['0BD2F4663F1C4D75BA9F43924E4F453E'].setZIndex(-500001);
+                    var activeIDs = [],
+                        baseLayers = [
+                        { id: '076F16BAE008401481F1C3D08B2A13DA', name: 'NDVI на 11-07-2012'},
+                        { id: '9FFB0FC31FAF496C895B3A2F25EB9484', name: 'Крутизна склонов'},
+                        { id: '07D54252CE96415FA6CECA0034F8000B', name: 'Абсолютная высота'}
+                    ];
+                    baseLayers.map(function(it) {
+                        activeIDs.push(it.name);
+                        blm.add(it.name, {
+                            layers:[
+                                //hybridLayers[0],
+                                gmxMap.layersByID[it.id].setZIndex(500000)
+								// ,
+                                // hybridLayers[1]
+                            ]
+                        });
                     });
+                    
+                    blm.setActiveIDs(activeIDs);
+                    blm.setCurrentID(activeIDs[1]);
+                    hybridLayers[1].addTo(map);
                 },
-                options: { attributionControl: false, scrollWheelZoom: false, zoom: 11, center: new L.LatLng(54.61028, 82.221679) }
+                options: { attributionControl: false, zoomControl: false, scrollWheelZoom: false, zoom: 11, center: new L.LatLng(54.61028, 82.221679) }
             },
             mosoblkult: { // Интерактивная карта объектов природного наследия
                 id: '6VYUE'
-                ,options: {attributionControl: false, scrollWheelZoom: false, zoom: 9, center: new L.LatLng(55.726456, 37.760009)}
-                ,bindPopup: function(gmxMap) { // подключение балунов
-                    var layer = gmxMap.layersByID['D9E2627441D844168F2DF44E749D9453'];
-                    layer
-                        .bindPopup('', { maxWidth: 560 })
-                        .on('popupopen', function(ev) {
-                                var popup = ev.popup,
-                                    props = ev.gmx.properties,
-                                    container = L.DomUtil.create('div', 'myPopup'),
-                                    prop = L.DomUtil.create('div', 'myName', container);
-                                    image = L.DomUtil.create('img', 'myImage', container);
-                                
-                                prop.innerHTML = '<h3>' + props['Наименование'] + '</h3>';
-                                L.extend(image, {
-                                    height: 150,
-                                    galleryimg: 'no',
-                                    onselectstart: L.Util.falseFn,
-                                    onmousemove: L.Util.falseFn,
-                                    onload: function(ev) {
-                                        popup.update();
-                                    },
-                                    src: props['Фото1']
-                                });
-                                prop = L.DomUtil.create('div', 'myName', container);
-                                prop.innerHTML = '<b>Адрес:</b> ' + props['Адрес современный'];
-                                prop = L.DomUtil.create('div', 'myName', container);
-                                prop.innerHTML = '<b>Категория:</b> ' + props['Категория'];
-                                popup.setContent(container);
-                        }, layer);
+                ,options: {attributionControl: false, zoomControl: false, scrollWheelZoom: false, zoom: 9, center: new L.LatLng(55.726456, 37.760009)}
+                //,bindPopup: function(gmxMap) { // подключение балунов
+                ,init: function(gmxMap, map) {
+                    for (var name in gmxMap.layersByTitle) {
+						var layer = gmxMap.layersByTitle[name];
+                        map.gmxLayersControl.addOverlay(layer, name);
+                        map.gmxLayersControl.options.hideBaseLayers = true;
+
+						layer
+							.bindPopup('', { maxWidth: 560 })
+							.on('popupopen', function(ev) {
+									var popup = ev.popup,
+										props = ev.gmx.properties,
+										container = L.DomUtil.create('div', 'myPopup'),
+										prop = L.DomUtil.create('div', 'myName', container);
+										image = L.DomUtil.create('img', 'myImage', container);
+									
+									prop.innerHTML = '<h3>' + props['Наименование'] + '</h3>';
+									L.extend(image, {
+										height: 150,
+										galleryimg: 'no',
+										onselectstart: L.Util.falseFn,
+										onmousemove: L.Util.falseFn,
+										onload: function(ev) {
+											popup.update();
+										},
+										src: props['Фото1']
+									});
+									prop = L.DomUtil.create('div', 'myName', container);
+									prop.innerHTML = '<b>Адрес:</b> ' + props['Адрес современный'];
+									prop = L.DomUtil.create('div', 'myName', container);
+									prop.innerHTML = '<b>Категория:</b> ' + props['Категория'];
+									popup.setContent(container);
+							}, layer);
+					}
                 }
             },
             flood: { // Мониторинг паводков на реках России для МЧС
                 id: '532875BB8F4B43F18529CBC78BA3580C',
-                options: { attributionControl: false, scrollWheelZoom: false, zoom: 14, center: new L.LatLng(52.560239, 85.340681)}
+                options: { attributionControl: false, zoomControl: false, scrollWheelZoom: false, zoom: 14, center: new L.LatLng(52.560239, 85.340681)}
                 ,bindPopup: function(gmxMap) { // подключение балунов
                     var layer = gmxMap.layersByID['03CBA68FAC6F4E0DB6B5A63D4EA121B4'];
                     layer
@@ -139,14 +200,27 @@
                         .openOn(this.map);
 
                     var layer = gmxMap.layersByID['5B6E92750658420C9CEB25F5408E02FA'];
-                    layer.setZIndex(-500000);
+                    //layer.setZIndex(-500000);
                     var tmap = layer._map;
-
-                    layer = gmxMap.layersByID['03CBA68FAC6F4E0DB6B5A63D4EA121B4'];
-                    if (layer && tmap) {
-                        var title = layer._gmx.properties.title || 'unknown layer'; // 'Затопленные жилые хозяйственные зоны'
-                        tmap.gmxLayersControl.addOverlay(layer, title);
+                    if (tmap) {
+                        tmap.gmxLayersControl.options.hideBaseLayers = true;
+                        // var nadp = L.tileLayer(getURL('kosmohyb'), {
+                            // maxZoom: 18,
+                            // gmxCopyright: getCopyright2()
+                        // }).addTo(tmap);
+                        // tmap.gmxLayersControl.addOverlay(nadp, 'Надписи');
+                        layer = gmxMap.layersByID['03CBA68FAC6F4E0DB6B5A63D4EA121B4'];
+                        if (layer && tmap) {
+                            var title = layer._gmx.properties.title || 'unknown layer'; // 'Затопленные жилые хозяйственные зоны'
+                            tmap.gmxLayersControl.addOverlay(layer, title);
+                        }
                     }
+                },
+                afterInitBaseLayers: function(gmxMap, map, mapProp) {
+                    var blm = map.gmxBaseLayersManager,
+                        hybrid = blm.get('hybrid'),
+                        hybridLayers = hybrid.getLayers();
+                    hybridLayers[1].setZIndex(3000000);
                 }
             }
         };
@@ -167,7 +241,7 @@
             }
             if (!attr.map) {
                 //стандартная карта Leaflet с минимальным набором контролов
-                var map = L.map(idCont, attr.options);
+				var map = L.map(idCont, attr.options);
                 attr.map = map;
                 
                 //загружаем карту ГеоМиксера
@@ -177,18 +251,24 @@
                     
                     //инициализируем контролы ГеоМиксера
                     map.addControl(L.control.gmxBottom())
-                        .addControl(L.control.gmxLocation())
-                        .addControl(L.control.gmxCopyright({type: 'window'}))
+                        .addControl(L.control.gmxZoom())
+                        .addControl(L.control.gmxLocation({scaleFormat: 0}))
+                        .addControl(L.control.gmxCopyright())
+                        //.addControl(L.control.gmxLogo())
                         .addControl(L.control.gmxLayers(blm));
 
                     //добавляем подложки из карты ГеоМиксера
-                    blm.initDefaults().then(function() {
-                        var baseLayers = mapProp.BaseLayers,
-                            currentID = mapProp.currentID || baseLayers[0];
-                            
-                        blm.setActiveIDs(baseLayers);
-                        if (currentID) blm.setCurrentID(currentID);
-                    });
+                    if (attr.initBaseLayers) attr.initBaseLayers(gmxMap, map, mapProp);
+                    else {
+                        blm.initDefaults().then(function() {
+                            var baseLayers = mapProp.BaseLayers,
+                                currentID = mapProp.currentID || baseLayers[0];
+
+                            blm.setActiveIDs(baseLayers);
+                            if (currentID) blm.setCurrentID(currentID);
+                            if (attr.afterInitBaseLayers) attr.afterInitBaseLayers(gmxMap, map, mapProp);
+                        });
+                    }
                     //добавляем кастомные балуны и начальные настройки карты
                     if (attr.bindPopup) attr.bindPopup(gmxMap);
                     if (attr.init) attr.init(gmxMap, map);

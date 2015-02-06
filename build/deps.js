@@ -27,6 +27,7 @@
     "external/Leaflet-GeoMixer/src/lang_ru.js",
     "external/Leaflet-GeoMixer/src/lang_en.js"
     ,
+    "external/gmxControls/src/js/gmxPosition.js",
     "external/gmxControls/src/js/L.Control.gmxIcon.js",
     "external/gmxControls/src/js/L.Control.gmxIconGroup.js",
     "external/gmxControls/src/js/L.Control.gmxDrawing.js", 
