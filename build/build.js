@@ -27,9 +27,10 @@ exports.build = function () {
 	console.log('Concatenating ' + depsJS.length + ' JS files...');
 	chkDistPath();
 
-	var intro = '(function () {\n"use strict";\n',
+	var copy = fs.readFileSync('external/Leaflet-GeoMixer/src/copyright.js', 'utf8'),
+        intro = '(function () {\n"use strict";\n',
 	    outro = '}());',
-	    newSrc = intro + combineFiles(depsJS) + outro,
+	    newSrc = copy + intro + combineFiles(depsJS) + outro,
 	    pathPart = 'dist/leaflet-geomixer-all',
 	    srcPath = pathPart + '-src.js';
 
@@ -41,7 +42,7 @@ exports.build = function () {
 	console.log('Compressing...');
 
 	var path = pathPart + '-min.js',
-		newCompressed = UglifyJS.minify(newSrc, {
+		newCompressed = copy + UglifyJS.minify(newSrc, {
 			warnings: true,
 			fromString: true
 		}).code;
