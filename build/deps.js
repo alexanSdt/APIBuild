@@ -1,4 +1,4 @@
-﻿var depsJS = [
+var depsJS = [
     "external/Leaflet-GeoMixer/src/Parsers.js",
     "external/Leaflet-GeoMixer/src/Deferred.js",
     "external/Leaflet-GeoMixer/src/ImageLoader.js",
