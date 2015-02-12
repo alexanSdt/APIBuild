@@ -40,6 +40,7 @@ var depsJS = [
     "external/gmxControls/src/js/L.Control.gmxCopyright.js",
     "external/gmxControls/src/js/L.Control.gmxZoom.js",
     "external/gmxControls/src/js/L.Control.gmxBottom.js",
+    "external/gmxControls/src/js/L.Control.gmxSidebar.js",
     "external/gmxControls/src/js/L.Control.gmxLogo.js"
     ,
     "external/gmxDrawing/src/L.GmxDrawing.js"
@@ -64,6 +65,7 @@ var depsCSS = [
     "external/gmxControls/src/css/L.Control.gmxCopyright.css",
     "external/gmxControls/src/css/L.Control.gmxZoom.css",
     "external/gmxControls/src/css/L.Control.gmxBottom.css",
+    "external/gmxControls/src/css/L.Control.gmxSidebar.css",
     "external/gmxControls/src/css/L.Control.gmxLogo.css",
     "external/gmxControls/src/css/external.css"
     ,
