@@ -19,6 +19,7 @@ var depsJS = [
     "external/Leaflet-GeoMixer/src/VectorTileLoader.js",
     "external/Leaflet-GeoMixer/src/gmxVectorLayer.js",
     "external/Leaflet-GeoMixer/src/gmxVectorLayer.Popup.js",
+    "external/Leaflet-GeoMixer/src/gmxVectorLayer.Hover.js",
     "external/Leaflet-GeoMixer/src/gmxRasterLayer.js",
     "external/Leaflet-GeoMixer/src/gmxLayerFactory.js",
     "external/Leaflet-GeoMixer/src/gmxLayersVersion.js",
