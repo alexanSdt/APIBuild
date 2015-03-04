@@ -15,6 +15,7 @@ Install `jake` (globally) and other plugins dependencies:
 npm install -g jake
 npm install
 npm install ncp
+npm install eslint
 ```
 
 Run the following command to build production version:
