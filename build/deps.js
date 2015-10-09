@@ -26,7 +26,9 @@ var depsJS = [
     "external/Leaflet-GeoMixer/src/ObjectsReorder.js",
     "external/Leaflet-GeoMixer/src/Locale.js",
     "external/Leaflet-GeoMixer/src/lang_ru.js",
-    "external/Leaflet-GeoMixer/src/lang_en.js"
+    "external/Leaflet-GeoMixer/src/lang_en.js",
+    "external/Leaflet-GeoMixer/src/MarkerCluster.js",
+    "external/Leaflet-GeoMixer/src/ClipPolygon.js"
     ,
     "external/gmxControls/src/js/gmxPosition.js",
     "external/gmxControls/src/js/gmxControlsManager.js",
@@ -46,7 +48,11 @@ var depsJS = [
     "external/gmxControls/src/js/L.Control.gmxSidebar.js",
     "external/gmxControls/src/js/L.Control.gmxLoaderStatus.js"
     ,
-    "external/gmxDrawing/src/L.GmxDrawing.js"
+    "external/gmxDrawing/src/L.GmxDrawing.js",
+    "external/gmxDrawing/src/L.GmxDrawing.Feature.js",
+    "external/gmxDrawing/src/L.GmxDrawing.Ring.js",
+    "external/gmxDrawing/src/L.GmxDrawing.PointMarkers.js",
+    "external/gmxDrawing/src/L.GmxDrawing.utils.js"
     ,
     "external/Leaflet.gmxBaseLayersManager/src/gmxBaseLayersManager.js",
     "external/Leaflet.gmxBaseLayersManager/src/initBaseLayerManager.js"
