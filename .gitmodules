@@ -22,3 +22,6 @@
 [submodule "external/Leaflet.markercluster"]
 	path = external/Leaflet.markercluster
 	url = git@github.com:OriginalSin/Leaflet.markercluster.git
+[submodule "external/Leaflet.heat"]
+	path = external/Leaflet.heat
+	url = git@github.com:OriginalSin/Leaflet.heat.git
