@@ -23,7 +23,7 @@ Run the following command to build production version:
 jake
 ```
 
-Files `leaflet-geomixer-all-min.js`, `leaflet-geomixer-all-src.js`, `css/leaflet-geomixer-all.css` and dir `css/img` will appear in `dist` forder. Do not commit this files to the repository!
+Files `leaflet-geomixer-allmin.js`, `leaflet-geomixer-allsrc.js`, `css/leaflet-geomixer-all.css` and dir `css/img` will appear in `dist` forder. Do not commit this files to the repository!
 
 You can use plugin without building including file `build/leaflet-geomixer-all-dev.js`. Note, that this script loads all the sources dynamically and should not be used for production deployment.
 

@@ -32,7 +32,7 @@ exports.build = function () {
 	    outro = '}());',
 	    newSrc = copy + intro + combineFiles(depsJS) + outro,
 	    pathPart = 'dist/leaflet-geomixer-all',
-	    srcPath = pathPart + '-src.js';
+	    srcPath = pathPart + 'src.js';
 
 	console.log('\tUncompressed size: ' + newSrc.length + ' bytes');
 
@@ -41,7 +41,7 @@ exports.build = function () {
 
 	console.log('Compressing...');
 
-	var path = pathPart + '-min.js',
+	var path = pathPart + 'min.js',
 		newCompressed = copy + UglifyJS.minify(newSrc, {
 			warnings: true,
 			fromString: true
