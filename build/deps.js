@@ -54,14 +54,14 @@ var depsJS = [
     "external/gmxDrawing/src/L.GmxDrawing.PointMarkers.js",
     "external/gmxDrawing/src/L.GmxDrawing.utils.js"
     ,
-    "external/Leaflet.gmxBaseLayersManager/src/gmxBaseLayersManager.js",
-    "external/Leaflet.gmxBaseLayersManager/src/initBaseLayerManager.js"
-    ,
     "external/Leaflet.TileLayer.Mercator/src/TileLayer.Mercator.js"
     ,
     "external/Leaflet.imageTransform/src/L.ImageTransform.js"
     ,
     "external/Leaflet.gmxGrid/src/Leaflet.gmxGrid.js"
+    ,
+    "external/Leaflet.gmxBaseLayersManager/src/gmxBaseLayersManager.js",
+    "external/Leaflet.gmxBaseLayersManager/src/initBaseLayerManager.js"
 ];
 var depsCSS = [
     "external/gmxControls/src/css/L.Control.gmxIcon.css",
