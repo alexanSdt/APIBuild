@@ -25,3 +25,6 @@
 [submodule "external/Leaflet.heat"]
 	path = external/Leaflet.heat
 	url = git@github.com:OriginalSin/Leaflet.heat.git
+[submodule "external/Leaflet.contextmenu"]
+	path = external/Leaflet.contextmenu
+	url = git@github.com:aratcliffe/Leaflet.contextmenu.git
