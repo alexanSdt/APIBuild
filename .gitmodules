@@ -21,10 +21,10 @@
 	url = git@github.com:OriginalSin/Leaflet.gmxGrid.git
 [submodule "external/Leaflet.markercluster"]
 	path = external/Leaflet.markercluster
-	url = git@github.com:OriginalSin/Leaflet.markercluster.git
+	url = git@github.com:Leaflet/Leaflet.markercluster.git
 [submodule "external/Leaflet.heat"]
 	path = external/Leaflet.heat
-	url = git@github.com:OriginalSin/Leaflet.heat.git
+	url = git@github.com:Leaflet/Leaflet.heat.git
 [submodule "external/Leaflet.contextmenu"]
 	path = external/Leaflet.contextmenu
 	url = git@github.com:aratcliffe/Leaflet.contextmenu.git
