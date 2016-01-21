@@ -1,4 +1,5 @@
 var depsJS = [
+    "external/Leaflet-GeoMixer/src/commonjs.js",
     "external/Leaflet-GeoMixer/src/Parsers.js",
     "external/Leaflet-GeoMixer/src/Deferred.js",
     "external/Leaflet-GeoMixer/src/ImageLoader.js",
@@ -11,7 +12,7 @@ var depsJS = [
     "external/Leaflet-GeoMixer/src/Observer.js",
     "external/Leaflet-GeoMixer/src/LabelsLayer.js",
     "external/Leaflet-GeoMixer/src/Utils.js",
-    "external/Leaflet-GeoMixer/src/DrawCanvas.js",
+    "external/Leaflet-GeoMixer/src/DrawCanvas.js", 
     "external/Leaflet-GeoMixer/src/ImageTransform.js",
     "external/Leaflet-GeoMixer/src/SessionManager.js",
     "external/Leaflet-GeoMixer/src/MapManager.js",
@@ -27,7 +28,10 @@ var depsJS = [
     "external/Leaflet-GeoMixer/src/Locale.js",
     "external/Leaflet-GeoMixer/src/lang_ru.js",
     "external/Leaflet-GeoMixer/src/lang_en.js",
+    "external/Leaflet-GeoMixer/src/ExternalLayer.js",
+    "external/Leaflet-GeoMixer/src/BindWMS.js",
     "external/Leaflet-GeoMixer/src/MarkerCluster.js",
+    "external/Leaflet-GeoMixer/src/HeatMap.js",
     "external/Leaflet-GeoMixer/src/ClipPolygon.js"
     ,
     "external/gmxControls/src/js/gmxPosition.js",
