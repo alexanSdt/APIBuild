@@ -21,6 +21,7 @@
   },
   "globals": {
     "L": true,
+    "require": true,
     "module": false,
     "define": false,
     "ActiveXObject": true,
