@@ -37,6 +37,7 @@ exports.build = function () {
 	console.log('\tUncompressed size: ' + newSrc.length + ' bytes');
 
 	fs.writeFileSync(srcPath, newSrc);
+	fs.writeFileSync(pathPart + '-src.js', newSrc);
 	console.log('\tSaved to ' + srcPath);
 
 	console.log('Compressing...');
