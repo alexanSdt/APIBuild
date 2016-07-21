@@ -14,7 +14,8 @@ Install `jake` (globally) and other plugins dependencies:
 ```
 npm install -g jake
 npm install
-npm install ncp
+npm i ncp
+npm i uglify-js
 npm install eslint
 ```
 

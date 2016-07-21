@@ -1,13 +1,20 @@
 {
   "name": "APIv2",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "GeoMixer API for Leaflet",
   "devDependencies": {
     "leaflet": "^0.7.7",
     "eslint": "^2.7.0",
     "jake": "~0.5.16",
     "ncp": "^1.0.1",
-    "uglify-js": "~2.3.6"
+    "file-exists": "~1.0.0",
+    "directory-exists": "~1.0.1",
+    "uglify-js": "~2.3.6",
+    "gulp": "^3.8.10",
+    "node-uuid": "~1.4.3",
+    "handlebars": "~3.0.1",
+    "gulp-css-rebase-urls": "0.0.5",
+    "gulp-concat": "^2.4.2"
   },
   "repository": {
     "type": "git",
@@ -17,5 +24,6 @@
     "gis",
     "leaflet",
     "geomixer"
-  ]
+  ],
+  "license": "MIT"
 }

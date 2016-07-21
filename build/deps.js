@@ -1,4 +1,5 @@
-var depsJS = [
+var jsFiles = [
+/*
     "external/Leaflet-GeoMixer/src/commonjs.js",
     "external/Leaflet-GeoMixer/src/Parsers.js",
     "external/Leaflet-GeoMixer/src/Deferred.js",
@@ -63,6 +64,7 @@ var depsJS = [
     "external/gmxDrawing/src/L.GmxDrawing.PointMarkers.js",
     "external/gmxDrawing/src/L.GmxDrawing.utils.js"
     ,
+*/	
     "external/Leaflet.TileLayer.Mercator/src/TileLayer.Mercator.js"
     ,
     "external/Leaflet.imageTransform/src/L.ImageTransform.js"
@@ -72,7 +74,13 @@ var depsJS = [
     "external/Leaflet.gmxBaseLayersManager/src/gmxBaseLayersManager.js",
     "external/Leaflet.gmxBaseLayersManager/src/initBaseLayerManager.js"
 ];
-var depsCSS = [
+
+var jsFilesThidparty = [
+    "leaflet/leaflet.js"
+];
+
+var cssFiles = [
+/*
     "external/gmxControls/src/css/L.Control.gmxIcon.css",
     "external/gmxControls/src/css/L.Control.gmxIconGroup.css",
     "external/gmxControls/src/css/L.Control.gmxDrawing.css",
@@ -89,15 +97,15 @@ var depsCSS = [
     "external/gmxControls/src/css/external.css"
     ,
     "external/gmxDrawing/css/L.gmxDrawing.css"
+*/
 ];
 
-if (typeof exports !== 'undefined') {
-	exports.depsJS = depsJS;
-	exports.depsCSS = depsCSS;
-}
+var moduleFiles = {
+};
 
-if (typeof gmxAPIv2DevOnLoad === 'function') {
-	gmxAPIv2DevOnLoad(depsJS, depsCSS);
-} else if (typeof gmxAPI !== 'undefined' && typeof gmxAPI.gmxAPIv2DevLoader === 'function') {
-	gmxAPI.gmxAPIv2DevLoader(depsJS, depsCSS);
+module.exports = {
+    jsFiles: jsFiles,
+    jsFilesThidparty: jsFilesThidparty,
+    cssFiles: cssFiles,
+    moduleFiles: moduleFiles
 }

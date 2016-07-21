@@ -28,3 +28,6 @@
 [submodule "external/Leaflet.markercluster"]
 	path = external/Leaflet.markercluster
 	url = git@github.com:Leaflet/Leaflet.markercluster.git
+[submodule "external/Leaflet-IconLayers"]
+	path = external/Leaflet-IconLayers
+	url = git@github.com:ScanEx/Leaflet-IconLayers.git

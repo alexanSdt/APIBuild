@@ -1,7 +1,7 @@
 var fs = require('fs'),
     ncp = require('ncp').ncp,
     UglifyJS = require('uglify-js'),
-    deps = require('./deps.js'),
+    deps = require('./build/deps.js'),
     depsJS = deps.depsJS,
     depsCSS = deps.depsCSS;
 
