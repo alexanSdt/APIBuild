@@ -1,8 +1,6 @@
 /*
-Leaflet-GeoMixer building scripts.
+Lint scripts.
 */
-
-var build = require('./build/build.js');
 
 function hint(msg, args) {
     return function () {
@@ -18,7 +16,4 @@ function hint(msg, args) {
 desc('Check Leaflet source for errors with ESLint');
 task('lint', {async: true}, hint('Checking for JS errors...', 'external --ext .js --config build/eslintrc.json'));
 
-desc('Combine and compress Leaflet-GeoMixer source files');
-task('build', build.build);
-
-task('default', ['build']);
+task('default', ['lint']);
