@@ -5,119 +5,410 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
-	<link rel="stylesheet" href="../dist/css/geomixer.css" />
-	<script src="../dist/geomixer.js"></script>
+	<link rel="stylesheet" href="../dist/geomixer.css" />
+	<script src="../dist/geomixer-src.js?key=U92596WMIH"></script>
     <style>
         html, body, #map {
             height: 100%;
-            width: 100%;
             margin: 0px;
+        }
+        #controls {
+            position: absolute;
+            left: 54px;
+            top: 65px;
+            z-index: 1;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 1px 7px rgba(0,0,0,0.65);
+        }
+        
+        #controls button {
+            border-radius: 5px;
+            
+        }
+        
+        #controls > div {
+            padding: 6px;
+        }
+        
+        #title {
+            text-align: center;
+        }
+        .leaflet-gmx-icon-boxzoom {
+            background-position: -624px 1px;
+        }
+        .leaflet-gmx-icon-boxzoom-active {
+            background-position: -624px -25px;
+        }
+
+        .leaflet-control-permalink, .leaflet-control-print {
+            clear: none;
+        }
+        .leaflet-gmx-icon-permalink{
+            background-position: -532px 1px;
+        }
+
+        .leaflet-gmx-icon-print {
+            background-position: -50px -0px;    
+        }
+        .leaflet-gmx-icon-print,
+        .leaflet-gmx-icon-permalink,
+        .leaflet-gmx-icon-boxzoom
+        {
+            background-image: url("../dist/img/gmxSprite.png");
+        }
+        @media print {
+            @page { 
+                size: landscape;
+            }
         }
     </style>
 
 </head>
 <body>
+    <div id="controls">
+        <div id="title">Test build</div>
+        <div>
+            <button id="prev">Prev day</button>
+            <button id="next">Next day</button>
+            <span id="timeInfo"></span>
+        </div>
+        <div>
+            <button id="dayFilter">Day flybys</button>
+            <button id="nightFilter">Night flybys</button>
+            <button id="noneFilter">All flybys</button>
+        </div>
+    </div>
 
 	<div id="map"></div>
 	<script type="text/javascript">
 
-		var map = L.map('map');
-		L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-			maxZoom: 18,
-			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
-		}).addTo(map);
-		map.setView([55.726456, 37.760009], 9);
-/*
-        if (!map.restoreView()) {
-            map.setView([55.726456, 37.760009], 9);
-        }
-
-		var markers = new L.MarkerClusterGroup({
-            showCoverageOnHover: false
-        });
-		map.addLayer(markers);
-
-		var items = {};
-
-        L.gmx.loadLayers([
-            {mapID: '6VYUE', layerID: 'D9E2627441D844168F2DF44E749D9453'}
-        ]).then(function(testLayer) {
-            
-            var observer = testLayer.addObserver({
-                callback: function(data) {
-                    markers.clearLayers();
-                    var arr = [];
-                    for (var i = 0, len = data.added.length; i < len; i++) {
-                        var vectorTileItem = data.added[i],
-                            id = vectorTileItem.id,
-                            marker = items[id];
-                        if (!marker) {
-                            var item = vectorTileItem.properties,
-                                geo = item[item.length - 1],
-                                title = item[0],
-                                parsedStyle = vectorTileItem.item.parsedStyleKeys,
-                                p = geo.coordinates,
-                                latlng = L.Projection.Mercator.unproject({x: p[0], y: p[1]});
-                            marker = new L.Marker(latlng, {
-                                icon: L.icon({
-                                    iconUrl: parsedStyle.iconUrl
-                                })
-                            });
-                            marker.bindPopup('',
-                                {
-                                    autoPan: false,
-                                    properties: vectorTileItem.properties,
-                                    gmx: vectorTileItem.gmx,
-                                    maxWidth: 560
-                                }
-                            );
-                            marker.on('popupopen', function(ev) {
-                                var popup = ev.popup,
-                                    props = testLayer.getItemProperties(popup.options.properties),
-                                    container = L.DomUtil.create('div', 'myPopup'),
-                                    prop = L.DomUtil.create('div', 'myName', container);
-                                    image = L.DomUtil.create('img', 'myImage', container);
-                                
-                                prop.innerHTML = '<h3>' + props['Наименование'] + '</h3>';
-                                L.extend(image, {
-                                    width: 400,
-                                    galleryimg: 'no',
-                                    onselectstart: L.Util.falseFn,
-                                    onmousemove: L.Util.falseFn,
-                                    onload: function(ev) {
-                                        popup.update();
-                                    },
-                                    src: props['Фото1']
-                                });
-                                prop = L.DomUtil.create('div', 'myName', container);
-                                prop.innerHTML = '<b>Адрес:</b> ' + props['Адрес современный'];
-                                prop = L.DomUtil.create('div', 'myName', container);
-                                prop.innerHTML = '<b>Категория:</b> ' + props['Категория'];
-                                popup.setContent(container);
-                            });
-                            items[id] = marker;
-                        }
-                        arr.push(marker);
-                    }
-                    markers.addLayers(arr);
-                }
-                ,filters: ['styleFilter']
-                ,type: 'resend'
-            });
-            var updateBbox = function() {
-                var screenBounds = map.getBounds(),
-                    p1 = screenBounds.getNorthWest(),
-                    p2 = screenBounds.getSouthEast(),
-                    bbox = gmxAPIutils.bounds([[p1.lng, p1.lat], [p2.lng, p2.lat]]);
-                observer.setBounds(bbox);
-            };
-            map.on('moveend', updateBbox);
-            testLayer.setFilter(function() {
-                return false;
-            });
-            map.addLayer(testLayer);
+		var map = L.map('map', {
+			center: [55.726456, 37.760009],
+			attributionControl: false,
+			//zoomControl: false,
+			zoom: 9
 		});
+		// var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+				// maxZoom: 18,
+				// attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+			// }).addTo(map)
+		// var lControl = L.control.layers({
+			// 'OSM': osm
+		// }, {
+		// }, {collapsed: false}).addTo(map);
+
+        var startDate = new Date('2014/08/13');
+        var oneDay = 1000*60*60*24,    // milliseconds in one day
+            now = startDate.getTime(),
+            ddt1 = new Date( now - now % oneDay + oneDay), //beginning of the previous UTC day
+            ddt2 = new Date(ddt1.getTime() + oneDay); //beginning of the current UTC day
+
+        var updateInfo = function(currentDate) {
+            var zz = function(x) { return x < 10 ? "0" + x : x}
+            var dateStr = zz(currentDate.getUTCDate()) + '.' + zz(currentDate.getUTCMonth() + 1) + '.' + zz(currentDate.getUTCFullYear());
+            document.getElementById('timeInfo').innerHTML = dateStr;
+        }
+        updateInfo(ddt1);
+/*
+        L.gmx.loadLayers([
+            {mapID: '1D30C72D02914C5FB90D1D448159CAB6', layerID: 'C9458F2DCB754CEEACC54216C7D1EB0A'},
+            {mapID: '1D30C72D02914C5FB90D1D448159CAB6', layerID: 'BCCCE2BDC9BF417DACF27BB4D481FAD9'},
+            {mapID: 'AZR6A',                            layerID: 'AFD35F403176491F8E7AB6CF28DFB166'},
+            {mapID: 'AZR6A',                            layerID: 'EB271FC4D2AD425A9BAA78ADEA041AB9'}
+        ]).then(function(satellite, labels, regionsLayer, modisLayer) {
+            modisLayer.setDateInterval(ddt1, ddt2);
+
+			lControl.addBaseLayer(satellite, 'ScanEx Satellite');
+			lControl.addOverlay(modisLayer, 'ScanEx MODIS');
+			lControl.addOverlay(regionsLayer, 'Russia Regions');
+			lControl.addOverlay(labels, 'Labels');
+            
+            //controls
+			L.DomUtil.get('prev').onclick = function() {
+                ddt1 = new Date(ddt1.getTime() - oneDay);
+                ddt2 = new Date(ddt2.getTime() - oneDay);
+                modisLayer.setDateInterval(ddt1, ddt2);
+                updateInfo(ddt1);
+            }
+            
+            L.DomUtil.get('next').onclick = function() {
+                ddt1 = new Date(ddt1.getTime() + oneDay);
+                ddt2 = new Date(ddt2.getTime() + oneDay);
+                modisLayer.setDateInterval(ddt1, ddt2);
+                updateInfo(ddt1);
+            }
+            
+            var IsDayIndex = modisLayer._gmx.tileAttributeIndexes.IsDay;
+            L.DomUtil.get('dayFilter').onclick = function() {
+                modisLayer.setFilter(function(item) {
+                    return item.properties[IsDayIndex];
+                });
+            }
+            
+            L.DomUtil.get('nightFilter').onclick = function() {
+                modisLayer.setFilter(function(item) {
+                    return !item.properties[IsDayIndex];
+                });
+            }
+            
+            L.DomUtil.get('noneFilter').onclick = function() {
+                modisLayer.setFilter(null);
+            }
+        });
 */
+        map.gmxControlsManager.init({
+            // gmxDrawing: null
+        });
+
+        var blm = map.gmxBaseLayersManager;
+        blm.initDefaults().then(function() {
+            var baseLayers = blm.getAll().map(function(baseLayer) { return baseLayer.id; });
+            blm.setActiveIDs(baseLayers).setCurrentID(baseLayers[0]);
+            map.addControl(L.control.gmxLayers(blm));
+        });
+        blm.on('baselayerchange', function(ev) {
+            var id = ev.baseLayer.id;
+            if (id === 'slope' || id === 'aspect') {
+                map.setZoom(9);
+            }
+        });
+
+        map.addControl(L.control.gmxIcon({
+            id: 'saveMe',
+            text: 'Сохранить',
+            title: 'Сохранить объекты'
+         })
+        );
+
+        var myGroupControl2 = L.control.gmxIconGroup({
+            id: 'myGroupTextControl2',
+            singleSelection: true,
+            isSortable: true,
+            width: 'auto',
+            items: [
+                L.control.gmxIcon({
+                    id: 'editMe',
+                    text: 'Редактировать',
+                    title: 'Редактировать объект'
+                }),
+                L.control.gmxIcon({
+                    id: 'saveMe',
+                    text: 'Сохранить',
+                    title: 'Сохранить объекты'
+                })
+            ]
+        });
+        map.addControl(myGroupControl2);
+
+        L.gmxLocale.addText({
+            eng: {
+                edit: 'Edit',
+                print: 'Print',
+                permalink: 'Link to the map',
+                boxZoom: 'BoxZoom'
+            },
+            rus: {
+                edit: 'Редактировать',
+                print: 'Печать',
+                permalink: 'Пермалинк',
+                boxZoom: 'Увеличение'
+            }
+        });
+
+        var myGroupControl1 = L.control.gmxIconGroup({
+            id: 'myGroupControl1',
+            items: [
+                L.control.gmxIcon({
+                    id: 'editVectorObject1',
+                    title: L.gmxLocale.getText('edit'),
+                    togglable: true,
+                    regularImageUrl: 'img/project_tool.png',
+                    activeImageUrl: 'img/project_tool_a.png'
+                })
+                .on('statechange', function (ev) {
+                    console.log('editVectorObject1', ev);
+                })
+                ,
+                L.control.gmxIcon({
+                    id: 'boxzoom',
+                    togglable: true,
+                    title: L.gmxLocale.getText('boxZoom'),
+                    onAdd: function (control) {
+                        //console.log('onAdd', this, arguments);
+                        var _onMouseDown = map.boxZoom._onMouseDown;
+                        map.boxZoom._onMouseDown = function (e) {
+                            _onMouseDown.call(map.boxZoom, {
+                                clientX: e.clientX,
+                                clientY: e.clientY,
+                                which: 1,
+                                shiftKey: true
+                            });
+                        };
+                        map.on('boxzoomend', function () {
+                            map.dragging.enable();
+                            map.boxZoom.removeHooks();
+                            control.setActive(false);
+                        });
+                    }
+                  })
+                  .on('statechange', function (ev) {
+                    //console.log('boxzoom', ev);
+                    var control = ev.target;
+                    if (control.options.isActive) {
+                        map.dragging.disable();
+                        map.boxZoom.addHooks();
+                    } else {
+                        map.dragging.enable();
+                        map.boxZoom.removeHooks();
+                    }
+                 })
+            ]
+        });
+        map.addControl(myGroupControl1);
+        map
+            .addControl(L.control.gmxIcon({
+                id: 'print',
+                title: L.gmxLocale.getText('print')
+             })
+              .on('click', function (ev) {
+                console.log('print', ev);
+                window.print();
+              })
+            )
+            .addControl(L.control.gmxIcon({
+                id: 'permalink',
+                title: L.gmxLocale.getText('permalink')
+             })
+              .on('statechange', function (ev) {
+                console.log('permalink', ev);
+              })
+            );
+
+        var prefix = 'http://maps.kosmosnimki.ru/GetImage.ashx?usr=khaibrik%40scanex.ru&img='
+        var items = [
+/*
+            L.control.gmxIcon({
+                id: 'addObject3',
+                title: 'Добавить новый объект 3',
+                regularImageUrl: prefix + 'sled_walf.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject4',
+                title: 'Добавить новый объект 4',
+                regularImageUrl: prefix + 'logovo_walf.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+			,
+            L.control.gmxIcon({
+                id: 'addObject5',
+                title: 'Добавить новый объект 5',
+                togglable: true,
+                regularImageUrl: prefix + 'polygon_walf.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject6',
+                title: 'Добавить новый объект 6',
+                togglable: true,
+                regularImageUrl: prefix + 'sled_beer.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject7',
+                title: 'Добавить новый объект 7',
+                togglable: true,
+                regularImageUrl: prefix + 'polygon_beer.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject8',
+                title: 'Добавить новый объект 8',
+                togglable: true,
+                regularImageUrl: prefix + 'zmu.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+*/
+            L.control.gmxIcon({
+                id: 'print',
+                //id: 'addObject9',
+                title: 'Добавить новый объект 9',
+                togglable: true
+				// ,
+                // regularImageUrl: prefix + 'days.png'
+            })
+            .on('click', function (ev) {
+				console.log('click', this, arguments);
+				var cont = L.DomUtil.create('div', 'dialogContainer');
+
+            }, this)
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject10',
+                title: 'Добавить новый объект 10',
+                togglable: false,
+				skipCollapse: true,
+                regularImageUrl: prefix + 'test.png'
+            })
+            .on('click', function (ev) {
+				console.log('clickddd', this, arguments);
+				var cont = L.DomUtil.create('div', 'dialogContainer');
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+        ];
+        var myGroupControl = L.control.gmxIconGroup({
+            id: 'myGroupControl',
+            addBefore: 'boxzoom',
+			//isCollapsible: false,
+            //singleSelection: true,
+            //isSortable: true,
+            items: items
+        });
+        map.addControl(myGroupControl);
+		//myGroupControl.options.isCollapsible = true;
+		myGroupControl._minimize();
+
 	</script>
 </body>
 </html>

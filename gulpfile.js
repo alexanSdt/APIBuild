@@ -1,5 +1,7 @@
-var gulp = require('gulp'),
+var gmxDeps = require('./build/deps.js'),
+	gulp = require('gulp'),
     path = require('path'),
+    ncp = require('ncp').ncp,
 	fileExists = require('file-exists'),
 	dirExists = require('directory-exists'),
 	cp = require('child_process'),
@@ -8,8 +10,69 @@ var gulp = require('gulp'),
     uuid = require('node-uuid'),
     fs = require('fs'),
     Handlebars = require('handlebars'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+	root = './',
+	external = root + 'external/';
 
+function outBuild(name, js, css) {
+	if (js) {
+		var buildDate = new Date().toLocaleString(),
+			prefix = '(function () {\n\'use strict\';\nvar buildDate = \'' + buildDate + '\';\n',
+			postfix = '\n}());\n';
+
+		fs.writeFileSync(name + '-src.js', prefix + js + postfix);
+		fs.writeFileSync(name + '.js', prefix + UglifyJS.minify(js, {warnings: true, fromString: true}).code + postfix);
+	}
+	if (css) {
+		fs.writeFileSync(name + '.css', css);
+	}
+}
+gulp.task('gmx-pub', [], function(cb) {
+    var apiFiles = gmxDeps.apiFiles,
+        buildDate = new Date().toLocaleString(),
+        buildUUID = uuid.v4().replace(/-/g, ''),
+		newJs = '',
+		newCss = '';
+		
+    fs.mkdir(root + 'dist/', function() {
+		var distPath = root + 'dist/';
+		apiFiles.forEach(function(it) {
+			console.time(it.key);
+			var dir = external + it.key,
+				mobiles = it.mobiles,
+				jake = it.pub.jake,
+				jsFiles = it.pub.js || [],
+				cssFiles = it.pub.css || [],
+				img = it.pub.img;
+			
+			if (jake && fileExists(dir + '/Jakefile.js')) {
+				var fromDir = process.cwd();
+				process.chdir(dir);
+				execSync((process.platform === 'win32' ? 'npm.cmd' : 'npm') + ' install');
+				execSync(jake);
+				process.chdir(fromDir);
+			}
+
+			jsFiles.forEach(function(name) {
+				newJs += fs.readFileSync(dir + '/' + name, 'utf8') + '\n\n';
+			});
+			cssFiles.forEach(function(name) {
+				newCss += fs.readFileSync(dir + '/' + name, 'utf8') + '\n\n';
+			});
+			if (img) {
+				ncp(dir + '/' + img.src, distPath + img.out);
+			}
+			console.timeEnd(it.key);
+
+			if (mobiles) {
+				outBuild(distPath + 'mobiles', newJs, newCss);
+			}
+		});
+		outBuild(distPath + 'geomixer', newJs, newCss);
+    });
+});
+
+/*
 var root = "./",
     commonRoot = root + 'common_components/repo/',
     distDir = root + 'dist/',
@@ -174,4 +237,5 @@ gulp.task('gmx-dev-self', function(cb) {
         cssToLoad:      [].concat(gmxDeps.cssFiles, gmxControlsCSS, gmxDrawingCSS),
         moduleFiles:    gmxDeps.moduleFiles
     }, cb);
-})
+});
+*/

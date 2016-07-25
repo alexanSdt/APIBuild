@@ -1,5 +1,107 @@
-var jsFiles = [
+var apiFiles = [
+	{
+		key: 'Leaflet-0.7.7',						// path in external
+		pub: {
+			js: ['dist/leaflet.js'],
+			css: ['dist/leaflet.css'],
+			img: { src: 'dist/images', out: 'images' }
+		},
+		dev: {
+			js: ['dist/leaflet-src.js'],
+			css: ['dist/leaflet.css']
+		}
+	},
+	{
+		key: 'Leaflet-GeoMixer',
+		mobiles: true,								// build for mobiles
+		pub: {
+			jake: 'jake build',
+			js: ['dist/leaflet-geomixer-src.js']
+		},
+		dev: {
+		}
+	},
+	{
+		key: 'gmxControls',
+		pub: {
+			jake: 'jake build',
+			js: ['dist/gmxControls-src.js'],
+			css: ['dist/css/gmxControls.css'],
+			img: { src: 'dist/css/img', out: 'img'}
+		},
+		dev: {
+		}
+	},
+	{
+		key: 'gmxDrawing',
+		pub: {
+			jake: 'jake build',
+			js: ['dist/gmxDrawing-src.js'],
+			css: ['dist/css/gmxDrawing.css']
+		},
+		dev: {
+		}
+	},
+	{
+		key: 'Leaflet.gmxGrid',
+		pub: {
+			js: ['src/Leaflet.gmxGrid.js']
+		},
+		dev: {
+			js: ['src/Leaflet.gmxGrid.js']
+		}
+	},
+	{
+		key: 'Leaflet.TileLayer.Mercator',
+		pub: {
+			js: ['src/TileLayer.Mercator.js']
+		},
+		dev: {
+			js: ['src/TileLayer.Mercator.js']
+		}
+	},
+	{
+		key: 'Leaflet.gmxBaseLayersManager',
+		pub: {
+			js: ['src/gmxBaseLayersManager.js', 'src/initBaseLayerManager.js']
+		},
+		dev: {
+			js: ['src/gmxBaseLayersManager.js', 'src/initBaseLayerManager.js']
+		}
+	},
+	{
+		key: 'Leaflet.contextmenu',
+		pub: {
+			js: ['dist/leaflet.contextmenu.js'],
+			css: ['dist/leaflet.contextmenu.css']
+		},
+		dev: {
+			js: ['dist/leaflet.contextmenu.js'],
+			css: ['dist/leaflet.contextmenu.css']
+		}
+	},
+	{
+		key: 'Leaflet.heat',
+		pub: {
+			js: ['dist/leaflet-heat.js']
+		},
+		dev: {
+			js: ['dist/leaflet-heat.js']
+		}
+	},
+	{
+		key: 'Leaflet.markercluster',
+		pub: {
+			js: ['dist/leaflet.markercluster-src.js'],
+			css: ['dist/MarkerCluster.css', 'dist/MarkerCluster.Default.css']
+		},
+		dev: {
+			js: ['dist/leaflet.markercluster-src.js'],
+			css: ['dist/MarkerCluster.css', 'dist/MarkerCluster.Default.css']
+		}
+	}
 /*
+  
     "external/Leaflet-GeoMixer/src/commonjs.js",
     "external/Leaflet-GeoMixer/src/Parsers.js",
     "external/Leaflet-GeoMixer/src/Deferred.js",
@@ -64,7 +166,7 @@ var jsFiles = [
     "external/gmxDrawing/src/L.GmxDrawing.PointMarkers.js",
     "external/gmxDrawing/src/L.GmxDrawing.utils.js"
     ,
-*/	
+	
     "external/Leaflet.TileLayer.Mercator/src/TileLayer.Mercator.js"
     ,
     "external/Leaflet.imageTransform/src/L.ImageTransform.js"
@@ -73,6 +175,7 @@ var jsFiles = [
     ,
     "external/Leaflet.gmxBaseLayersManager/src/gmxBaseLayersManager.js",
     "external/Leaflet.gmxBaseLayersManager/src/initBaseLayerManager.js"
+	*/
 ];
 
 var jsFilesThidparty = [
@@ -104,8 +207,8 @@ var moduleFiles = {
 };
 
 module.exports = {
-    jsFiles: jsFiles,
-    jsFilesThidparty: jsFilesThidparty,
+    apiFiles: apiFiles,
+    mobiles: ['Leaflet-0.7.7', 'Leaflet-GeoMixer'],
     cssFiles: cssFiles,
     moduleFiles: moduleFiles
 }
