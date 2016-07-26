@@ -34,4 +34,4 @@ images - папка иконок Leaflet-0.7.7
 ```
 
 Сборки доступны по адресу:
-http://www.kosmosnimki.ru/demo/apiv3/
+http://www.kosmosnimki.ru/apiv3/
