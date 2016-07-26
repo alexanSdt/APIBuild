@@ -1,7 +1,7 @@
-buildAPIV2
+buildAPIV3
 ==========
 
-API version 2 builder
+API version 3 builder
 
 # Пример сборки плагинов Геомиксера
 
@@ -10,23 +10,25 @@ Build
 
 [NodeJS](http://nodejs.org/) is required to build the plugin.
 
-Install `jake` (globally) and other plugins dependencies:
 ```
-npm install -g jake
-npm install
-npm i ncp
-npm i uglify-js
-npm install eslint
+prepare_repo.bat - обновление модулей для сборки
+build_pub.bat - подготовка сборок (режим публикации)
 ```
 
-Run the following command to build production version:
+Подготавливаются следующие сборки в папке `dist`.
+Сборка общая:
 ```
-jake
+geomixer.js - API минимизированный вариант(содержит: Leaflet-0.7.7 + необходимые плагины Geomixer)
+geomixer-src.js - API в исходном виде
+geomixer.css - стилевые таблицы
+images - папка иконок Leaflet-0.7.7
+img - папка иконок контролов Geomixer
 ```
 
-Files `leaflet-geomixer-allmin.js`, `leaflet-geomixer-allsrc.js`, `css/leaflet-geomixer-all.css` and dir `css/img` will appear in `dist` forder. Do not commit this files to the repository!
-
-You can use plugin without building including file `build/leaflet-geomixer-all-dev.js`. Note, that this script loads all the sources dynamically and should not be used for production deployment.
-
-List of source files is maintained in file `build/deps.js`. It should be updated properly for correct builds.
-
+Сборка для мобильных устройств:
+```
+mobiles.js - API-mobiles минимизированный вариант(содержит: Leaflet-0.7.7 + Leaflet-Geomixer)
+mobiles-src.js - API-mobiles в исходном виде
+mobiles.css - стилевые таблицы
+images - папка иконок Leaflet-0.7.7
+```
