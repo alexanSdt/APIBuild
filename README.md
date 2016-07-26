@@ -32,3 +32,6 @@ mobiles-src.js - API-mobiles в исходном виде
 mobiles.css - стилевые таблицы
 images - папка иконок Leaflet-0.7.7
 ```
+
+Сборки доступны по адресу:
+http://www.kosmosnimki.ru/demo/apiv3/
