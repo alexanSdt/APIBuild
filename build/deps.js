@@ -2,7 +2,7 @@ var apiFiles = [
 	{
 		key: 'Leaflet-0.7.7',						// path in external
 		pub: {
-			js: ['dist/leaflet.js'],
+			js: ['dist/leaflet-src.js'],
 			css: ['dist/leaflet.css'],
 			img: { src: 'dist/images', out: 'images' }
 		},
