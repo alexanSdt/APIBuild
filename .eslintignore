@@ -5,6 +5,8 @@
 **/examples
 **/examplesV2
 **/debug
+**/node_modules
+**/dist
 **/Leaflet-GeoMixer/dist
 **/Leaflet.markercluster
 **/Leaflet.heat
