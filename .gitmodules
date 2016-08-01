@@ -10,15 +10,6 @@
 [submodule "external/Leaflet.imageTransform"]
 	path = external/Leaflet.imageTransform
 	url = git@github.com:ScanEx/Leaflet.imageTransform.git
-[submodule "external/Leaflet.gmxBaseLayersManager"]
-	path = external/Leaflet.gmxBaseLayersManager
-	url = git@github.com:OriginalSin/Leaflet.gmxBaseLayersManager.git
-[submodule "external/Leaflet.TileLayer.Mercator"]
-	path = external/Leaflet.TileLayer.Mercator
-	url = git@github.com:OriginalSin/Leaflet.TileLayer.Mercator.git
-[submodule "external/Leaflet.gmxGrid"]
-	path = external/Leaflet.gmxGrid
-	url = git@github.com:OriginalSin/Leaflet.gmxGrid.git
 [submodule "external/Leaflet.contextmenu"]
 	path = external/Leaflet.contextmenu
 	url = git@github.com:aratcliffe/Leaflet.contextmenu.git
@@ -28,6 +19,3 @@
 [submodule "external/Leaflet.markercluster"]
 	path = external/Leaflet.markercluster
 	url = git@github.com:Leaflet/Leaflet.markercluster.git
-[submodule "external/Leaflet-IconLayers"]
-	path = external/Leaflet-IconLayers
-	url = git@github.com:ScanEx/Leaflet-IconLayers.git
