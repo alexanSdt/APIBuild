@@ -207,8 +207,9 @@ var moduleFiles = {
 };
 
 module.exports = {
-    apiFiles: apiFiles,
-    mobiles: ['Leaflet-0.7.7', 'Leaflet-GeoMixer'],
-    cssFiles: cssFiles,
-    moduleFiles: moduleFiles
+    apiFiles: apiFiles
+	// ,
+    // mobiles: ['Leaflet-0.7.7', 'Leaflet-GeoMixer'],
+    // cssFiles: cssFiles,
+    // moduleFiles: moduleFiles
 }
