@@ -12,7 +12,8 @@ Build
 
 ```
 prepare_repo.bat - обновление модулей для сборки
-build_pub.bat - подготовка сборок (режим публикации)
+gulp gmx-pub - подготовка сборок (режим публикации)
+gulp gmx-dev - подготовка сборки (режим разработки)
 ```
 
 Подготавливаются следующие сборки в папке `dist`.
@@ -20,6 +21,7 @@ build_pub.bat - подготовка сборок (режим публикаци
 ```
 geomixer.js - API минимизированный вариант(содержит: Leaflet-0.7.7 + необходимые плагины Geomixer)
 geomixer-src.js - API в исходном виде
+geomixer-dev.js - загрузчик API для режима разработки
 geomixer.css - стилевые таблицы
 images - папка иконок Leaflet-0.7.7
 img - папка иконок контролов Geomixer
@@ -34,4 +36,4 @@ images - папка иконок Leaflet-0.7.7
 ```
 
 Сборки доступны по адресу:
-http://www.kosmosnimki.ru/apiv3/
+http://www.kosmosnimki.ru/lib/geomixer/
