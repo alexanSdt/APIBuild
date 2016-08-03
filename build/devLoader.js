@@ -65,4 +65,7 @@
 			resolve();
 		});
 		// end load src files
+	})
+	.catch(error => {
+		console.error('Error: ', error);
 	});
