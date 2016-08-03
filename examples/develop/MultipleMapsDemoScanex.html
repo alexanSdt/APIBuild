@@ -32,8 +32,7 @@
     </style>
  
 
-	<link rel="stylesheet" href="http://www.kosmosnimki.ru/lib/geomixer/geomixer.css" />
-	<script src="http://www.kosmosnimki.ru/lib/geomixer/geomixer.js?key=U92596WMIH"></script>
+	<script src="../../dist/geomixer-dev.js?key=U92596WMIH&prefix=../../"></script>
 
 </head>
 <body>
@@ -41,6 +40,7 @@
     <div id="mapsContent"></div>
 
     <script>
+	geomixerAPI.then(() => {
         var copyrights = {
             collinsbartholomew: "&copy; <a href='http://www.collinsbartholomew.com/'>Collins Bartholomew Ltd.</a>"
             ,openStreetMap: "&copy; участники OpenStreetMap <a href='http://www.openstreetmap.org/copyright'>ODbL</a>"
@@ -296,7 +296,7 @@
                 });
             }
         };
-        showMap('ndvi');
+		showMap('ndvi');
 
         function listener(event){
             if (mapsIDs[event.data]) showMap(event.data);
@@ -306,6 +306,7 @@
         } else {
             window.attachEvent("onmessage", listener);
         }
+	});
 	</script>
 
 </body>
