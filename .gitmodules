@@ -28,3 +28,6 @@
 [submodule "external/Leaflet.gmxBaseLayersManager"]
 	path = external/Leaflet.gmxBaseLayersManager
 	url = git@github.com:ScanEx/Leaflet.gmxBaseLayersManager.git
+[submodule "external/GMXVirtualTileLayer"]
+	path = external/GMXVirtualTileLayer
+	url = git@github.com:ScanEx/GMXVirtualTileLayer.git

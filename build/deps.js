@@ -73,6 +73,12 @@ var apiFiles = [
 			js: ['dist/leaflet.markercluster-src.js'],
 			css: ['dist/MarkerCluster.css', 'dist/MarkerCluster.Default.css']
 		}
+	},
+	{
+		key: 'GMXVirtualTileLayer',
+		pub: {
+			js: ['GmxVirtualTileLayer.js']
+		}
 	}
 ];
 
