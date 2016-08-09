@@ -1,15 +1,15 @@
 var gmxDeps = require('./build/deps.js'),
 	gulp = require('gulp'),
-    path = require('path'),
+    // path = require('path'),
     ncp = require('ncp').ncp,
 	fileExists = require('file-exists'),
-	dirExists = require('directory-exists'),
+	// dirExists = require('directory-exists'),
 	cp = require('child_process'),
 	execSync = cp.execSync,
     UglifyJS = require('uglify-js'),
     fs = require('fs'),
-    Handlebars = require('handlebars'),
-    concat = require('gulp-concat'),
+    // Handlebars = require('handlebars'),
+    // concat = require('gulp-concat'),
     uuid = require('node-uuid'),
 	buildUUID = uuid.v4().replace(/-/g, ''),
 	root = './',
@@ -33,8 +33,6 @@ function outBuild(name, js, css, type) {
 }
 gulp.task('gmx-pub', [], function(cb) {
     var apiFiles = gmxDeps.apiFiles,
-        // buildDate = new Date().toLocaleString(),
-        // buildUUID = uuid.v4().replace(/-/g, ''),
 		newJs = '',
 		newCss = '';
 		
@@ -78,8 +76,6 @@ gulp.task('gmx-pub', [], function(cb) {
 
 gulp.task('gmx-dev', function(cb) {
     var apiFiles = gmxDeps.apiFiles,
-        // buildDate = new Date().toLocaleString(),
-        // buildUUID = uuid.v4().replace(/-/g, ''),
 		filesDev = [],
 		filesCss = [];
 		
