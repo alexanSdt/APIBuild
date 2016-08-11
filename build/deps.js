@@ -1,84 +1,62 @@
 var apiFiles = [
 	{
 		key: 'Leaflet-0.7.7',						// path in external
-		pub: {
-			js: ['dist/leaflet-src.js'],
-			css: ['dist/leaflet.css'],
-			img: { src: 'dist/images', out: 'images' }
-		}
+		js: ['dist/leaflet-src.js'],
+		css: ['dist/leaflet.css'],
+		img: { src: 'dist/images', out: 'images' }
 	},
 	{
 		key: 'Leaflet-GeoMixer',
 		mobiles: true,								// build for mobiles
-		pub: {
-			deps: 'build/deps.js',
-			srcPath: 'src/',
-			jake: 'jake build',
-			js: ['dist/leaflet-geomixer-src.js']
-		}
+		deps: 'build/deps.js',
+		srcPath: 'src/',
+		jake: 'jake build',
+		js: ['dist/leaflet-geomixer-src.js']
 	},
 	{
 		key: 'gmxControls',
-		pub: {
-			deps: 'build/deps.js',
-			jake: 'jake build',
-			js: ['dist/gmxControls-src.js'],
-			css: ['dist/css/gmxControls.css'],
-			img: { src: 'dist/css/img', out: 'img'}
-		}
+		deps: 'build/deps.js',
+		jake: 'jake build',
+		js: ['dist/gmxControls-src.js'],
+		css: ['dist/css/gmxControls.css'],
+		img: { src: 'dist/css/img', out: 'img'}
 	},
 	{
 		key: 'gmxDrawing',
-		pub: {
-			deps: 'build/deps.js',
-			jake: 'jake build',
-			js: ['dist/gmxDrawing-src.js'],
-			css: ['dist/css/gmxDrawing.css']
-		}
+		deps: 'build/deps.js',
+		jake: 'jake build',
+		js: ['dist/gmxDrawing-src.js'],
+		css: ['dist/css/gmxDrawing.css']
 	},
 	{
 		key: 'Leaflet.gmxGrid',
-		pub: {
-			js: ['src/Leaflet.gmxGrid.js']
-		}
+		js: ['src/Leaflet.gmxGrid.js']
 	},
 	{
 		key: 'Leaflet.TileLayer.Mercator',
-		pub: {
-			js: ['src/TileLayer.Mercator.js']
-		}
+		js: ['src/TileLayer.Mercator.js']
 	},
 	{
 		key: 'Leaflet.gmxBaseLayersManager',
-		pub: {
-			js: ['src/gmxBaseLayersManager.js', 'src/initBaseLayerManager.js']
-		}
+		js: ['src/gmxBaseLayersManager.js', 'src/initBaseLayerManager.js']
 	},
 	{
 		key: 'Leaflet.contextmenu',
-		pub: {
-			js: ['dist/leaflet.contextmenu.js'],
-			css: ['dist/leaflet.contextmenu.css']
-		}
+		js: ['dist/leaflet.contextmenu.js'],
+		css: ['dist/leaflet.contextmenu.css']
 	},
 	{
 		key: 'Leaflet.heat',
-		pub: {
-			js: ['dist/leaflet-heat.js']
-		}
+		js: ['dist/leaflet-heat.js']
 	},
 	{
 		key: 'Leaflet.markercluster',
-		pub: {
-			js: ['dist/leaflet.markercluster-src.js'],
-			css: ['dist/MarkerCluster.css', 'dist/MarkerCluster.Default.css']
-		}
+		js: ['dist/leaflet.markercluster-src.js'],
+		css: ['dist/MarkerCluster.css', 'dist/MarkerCluster.Default.css']
 	},
 	{
 		key: 'GMXVirtualTileLayer',
-		pub: {
-			js: ['GmxVirtualTileLayer.js']
-		}
+		js: ['GmxVirtualTileLayer.js']
 	}
 ];
 

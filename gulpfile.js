@@ -1,15 +1,11 @@
 var gmxDeps = require('./build/deps.js'),
 	gulp = require('gulp'),
-    // path = require('path'),
     ncp = require('ncp').ncp,
 	fileExists = require('file-exists'),
-	// dirExists = require('directory-exists'),
 	cp = require('child_process'),
 	execSync = cp.execSync,
     UglifyJS = require('uglify-js'),
     fs = require('fs'),
-    // Handlebars = require('handlebars'),
-    // concat = require('gulp-concat'),
     uuid = require('node-uuid'),
 	buildUUID = uuid.v4().replace(/-/g, ''),
 	root = './',
@@ -32,20 +28,19 @@ function outBuild(name, js, css, type) {
 	}
 }
 gulp.task('gmx-pub', [], function(cb) {
-    var apiFiles = gmxDeps.apiFiles,
-		newJs = '',
-		newCss = '';
-		
     fs.mkdir(root + 'dist/', function() {
-		var distPath = root + 'dist/';
-		apiFiles.forEach(function(it) {
+		var newJs = '',
+			newCss = '',
+			distPath = root + 'dist/';
+
+		gmxDeps.apiFiles.forEach(function(it) {
 			console.time(it.key);
 			var dir = external + it.key,
 				mobiles = it.mobiles,
-				jake = it.pub.jake,
-				jsFiles = it.pub.js || [],
-				cssFiles = it.pub.css || [],
-				img = it.pub.img;
+				jake = it.jake,
+				jsFiles = it.js || [],
+				cssFiles = it.css || [],
+				img = it.img;
 			
 			if (jake && fileExists(dir + '/Jakefile.js')) {
 				var fromDir = process.cwd();
@@ -71,27 +66,23 @@ gulp.task('gmx-pub', [], function(cb) {
 			}
 		});
 		outBuild(distPath + 'geomixer', newJs, newCss);
+		cb();
     });
 });
 
 gulp.task('gmx-dev', function(cb) {
-    var apiFiles = gmxDeps.apiFiles,
-		filesDev = [],
-		filesCss = [];
-		
     fs.mkdir(root + 'dist/', function() {
-		var distPath = root + 'dist/';
-		apiFiles.forEach(function(it) {
+		var filesDev = [],
+			distPath = root + 'dist/';
+
+		gmxDeps.apiFiles.forEach(function(it) {
 			console.time(it.key);
 			var dir = external + it.key,
-				mobiles = it.mobiles,
-				jake = it.pub.jake,
-				deps = it.pub.deps || '',
-				srcPath = it.pub.srcPath || '',
-				jsFiles = it.pub.js || [],
-				cssFiles = it.pub.css || [],
-				arr = jsFiles.concat(cssFiles),
-				img = it.pub.img;
+				deps = it.deps || '',
+				srcPath = it.srcPath || '',
+				jsFiles = it.js || [],
+				cssFiles = it.css || [],
+				arr = jsFiles.concat(cssFiles);
 			
 			if (deps) {
 				var fromDeps = require(dir + '/' + deps);
@@ -100,12 +91,12 @@ gulp.task('gmx-dev', function(cb) {
 			arr.forEach(function(name) {
 				filesDev.push(dir + '/' + srcPath + name);
 			});
-
 		});
 
 		outBuild(distPath + 'geomixer',
 			'// files for loader\nvar files = [\n\'' + filesDev.join('\',\n\'') + '\'\n];\n'
 			+ fs.readFileSync(root + 'build/devLoader.js', {encoding: 'utf8'})		
 		, null, 'dev');
+		cb();
     });
 });
