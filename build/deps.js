@@ -33,6 +33,10 @@ var apiFiles = [
 		js: ['src/Leaflet.gmxGrid.js']
 	},
 	{
+		key: 'Leaflet.imageTransform',
+		js: ['src/L.ImageTransform.js']
+	},
+	{
 		key: 'Leaflet.TileLayer.Mercator',
 		js: ['src/TileLayer.Mercator.js']
 	},
