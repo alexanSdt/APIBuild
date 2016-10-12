@@ -14,7 +14,8 @@ var gmxDeps = require('./build/deps.js'),
 function outBuild(name, js, css, type) {
 	if (js) {
 		var buildDate = new Date().toLocaleString(),
-			prefix = '(function () {\n\'use strict\';\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
+			// prefix = '(function () {\n\'use strict\';\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
+			prefix = '(function () {\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
 			postfix = '\n}());\n';
 
 		if (type !== 'dev') {
@@ -34,7 +35,7 @@ gulp.task('gmx-pub', [], function(cb) {
 			distPath = root + 'dist/';
 
 		gmxDeps.apiFiles.forEach(function(it) {
-			console.time(it.key);
+			console.time(it.key || it.name);
 			var dir = external + it.key,
 				mobiles = it.mobiles,
 				jake = it.jake,
@@ -51,15 +52,17 @@ gulp.task('gmx-pub', [], function(cb) {
 			}
 
 			jsFiles.forEach(function(name) {
-				newJs += fs.readFileSync(dir + '/' + name, 'utf8') + '\n\n';
+				var prefix = it.key ? dir + '/' : '';
+				newJs += fs.readFileSync( prefix + name, 'utf8') + '\n\n';
 			});
 			cssFiles.forEach(function(name) {
-				newCss += fs.readFileSync(dir + '/' + name, 'utf8') + '\n\n';
+				var prefix = it.key ? dir + '/' : '';
+				newCss += fs.readFileSync(prefix + name, 'utf8') + '\n\n';
 			});
 			if (img) {
 				ncp(dir + '/' + img.src, distPath + img.out);
 			}
-			console.timeEnd(it.key);
+			console.timeEnd(it.key || it.name);
 
 			if (mobiles) {
 				outBuild(distPath + 'mobiles', newJs, newCss);

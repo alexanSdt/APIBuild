@@ -31,3 +31,9 @@
 [submodule "external/GMXVirtualTileLayer"]
 	path = external/GMXVirtualTileLayer
 	url = git@github.com:ScanEx/GMXVirtualTileLayer.git
+[submodule "external/es6-promise"]
+	path = external/es6-promise
+	url = git@github.com:ScanEx/es6-promise.git
+[submodule "external/fetch"]
+	path = external/fetch
+	url = git@github.com:github/fetch.git

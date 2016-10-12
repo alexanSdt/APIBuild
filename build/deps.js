@@ -1,5 +1,13 @@
 var apiFiles = [
 	{
+		name: 'fetch',
+		js: ['external/fetch/fetch.js']					// fetch polyfill		
+	},
+	{
+		name: 'es6-promise',
+		js: ['external/es6-promise/dist/es6-promise.auto.js']		// es6-promise polyfill
+	},
+	{
 		key: 'Leaflet-0.7.7',						// path in external
 		js: ['dist/leaflet-src.js'],
 		css: ['dist/leaflet.css'],
@@ -10,13 +18,11 @@ var apiFiles = [
 		mobiles: true,								// build for mobiles
 		deps: 'build/deps.js',
 		srcPath: 'src/',
-		jake: 'jake build',
 		js: ['dist/leaflet-geomixer-src.js']
 	},
 	{
 		key: 'gmxControls',
 		deps: 'build/deps.js',
-		jake: 'jake build',
 		js: ['dist/gmxControls-src.js'],
 		css: ['dist/css/gmxControls.css'],
 		img: { src: 'dist/css/img', out: 'img'}
@@ -24,7 +30,7 @@ var apiFiles = [
 	{
 		key: 'gmxDrawing',
 		deps: 'build/deps.js',
-		jake: 'jake build',
+		// jake: 'jake build',
 		js: ['dist/gmxDrawing-src.js'],
 		css: ['dist/css/gmxDrawing.css']
 	},
