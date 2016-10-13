@@ -15,7 +15,7 @@ function outBuild(name, js, css, type) {
 	if (js) {
 		var buildDate = new Date().toLocaleString(),
 			// prefix = '(function () {\n\'use strict\';\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
-			prefix = '(function () {\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
+			prefix = '(function () {\nvar define = null;\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
 			postfix = '\n}());\n';
 
 		if (type !== 'dev') {
