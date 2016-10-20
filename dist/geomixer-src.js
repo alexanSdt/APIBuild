@@ -1,7 +1,7 @@
 (function () {
 var define = null;
-var buildDate = '2016-10-20 14:00:55';
-var buildUUID = '76118e3f2a564a6fa5b49c9b54881d94';
+var buildDate = '2016-10-20 14:53:44';
+var buildUUID = '1c6b9fdf5ff84b2390242288f700db20';
 (function(self) {
   'use strict';
 
@@ -23292,6 +23292,7 @@ L.Map.addInitHook(function() {
     var map = this,
         hideControl = null,
         hiddenClass = 'leaflet-control-gmx-hidden',
+        svgLoaded = {},
 		// defaultSvgSprites = ['http://www.kosmosnimki.ru/lib/geomixer/img/svg-symbols.svg'],
 		defaultSvgSprites = ['img/svg-symbols.svg'],
         DEFAULT = ['gmxLoaderStatus', 'gmxHide', 'gmxZoom', 'gmxDrawing', 'gmxBottom', 'gmxLocation', 'gmxCopyright', 'gmxCenter', 'gmxLogo'];
@@ -23344,14 +23345,17 @@ L.Map.addInitHook(function() {
         setSvgSprites: function(arr) {
 			arr = arr && arr !== true ? (L.Util.isArray(arr) ? arr : [arr]) : defaultSvgSprites;
 			arr.forEach(function(url) {
-				var ajax = new XMLHttpRequest();
-				ajax.open('GET', url, true);
-				ajax.send();
-				ajax.onload = function() {
-				  var div = document.createElement('div');
-				  div.style.display = 'none';
-				  div.innerHTML = ajax.responseText;
-				  document.body.insertBefore(div, document.body.childNodes[0]);
+				if (!svgLoaded[url]) {
+					var ajax = new XMLHttpRequest();
+					ajax.open('GET', url, true);
+					ajax.send();
+					ajax.onload = function() {
+					  var div = document.createElement('div');
+					  div.style.display = 'none';
+					  div.innerHTML = ajax.responseText;
+					  document.body.insertBefore(div, document.body.childNodes[0]);
+					  svgLoaded[url] = true;
+					}
 				}
 			});
 			map.options.svgSprite = arr;
