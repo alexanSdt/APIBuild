@@ -1,7 +1,7 @@
 (function () {
 var define = null;
-var buildDate = '2016-10-13 13:56:51';
-var buildUUID = '7c581700953a461cb3918496ef905d7f';
+var buildDate = '2016-10-20 14:00:55';
+var buildUUID = '76118e3f2a564a6fa5b49c9b54881d94';
 (function(self) {
   'use strict';
 
@@ -11065,10 +11065,11 @@ if (typeof module !== 'undefined' && module.exports) {
 				};
 			}
 
-			return function(props, indexes) {
+			return function(props, indexes, types) {
 				var fieldValue = props[indexes[fieldName]],
                     rValue = referenceValue;
                 if (referenceValue in indexes) { rValue = props[indexes[rValue]]; }
+                if (types[fieldName] === 'date' && typeof rValue === 'string') { rValue = L.gmxUtil.getUnixTimeFromStr(rValue); }
                 if (typeof fieldValue === 'boolean' && typeof rValue === 'string') {
                     fieldValue = fieldValue ? 'True' : 'False';
                 }
@@ -11080,7 +11081,7 @@ if (typeof module !== 'undefined' && module.exports) {
 /*eslint-enable */
                 } else {
                     var f1, f2;
-					if (!(referenceValue in indexes) && applyParser(rValue, numberLiteral).head === rValue.length) {
+					if (!(referenceValue in indexes) && typeof rValue === 'string' && applyParser(rValue, numberLiteral).head === rValue.length) {
 						f1 = parseFloat(fieldValue);
 						f2 = parseFloat(rValue);
 						if (op === '<') { return (f1 < f2);
@@ -11144,8 +11145,8 @@ if (typeof module !== 'undefined' && module.exports) {
 		function(state) {
 			// Linked list contains only processed inner term.
 			var innerTerm = state.head;
-			return function(props, indexes) {
-				return !innerTerm(props, indexes);
+			return function(props, indexes, types) {
+				return !innerTerm(props, indexes, types);
 			};
 		}
 	);
@@ -11165,11 +11166,11 @@ if (typeof module !== 'undefined' && module.exports) {
 		function(state) {
 			// Linked list contains multiple processed inner terms
 			//   (in reverse order).
-			return function(props, indexes) {
+			return function(props, indexes, types) {
 				var flag = true;
 				var node = state;
 				while (node != null) {
-					flag = flag && node.head(props, indexes);
+					flag = flag && node.head(props, indexes, types);
 					node = node.tail;
 				}
 				return flag;
@@ -11182,11 +11183,11 @@ if (typeof module !== 'undefined' && module.exports) {
 		function(state) {
 			// Linked list contains multiple processed inner terms
 			//   (in reverse order).
-			return function(props, indexes) {
+			return function(props, indexes, types) {
 				var flag = false;
 				var node = state;
 				while (node != null) {
-					flag = flag || node.head(props, indexes);
+					flag = flag || node.head(props, indexes, types);
 					node = node.tail;
 				}
 				return flag;
@@ -11223,12 +11224,12 @@ if (typeof module !== 'undefined' && module.exports) {
 		),
 		function(state)
 		{
-			return function(props, indexes)
+			return function(props, indexes, types)
 			{
 				var pos = state;
 				var term = 0.0;
 				while (pos !== null) {
-					term += pos.head(props, indexes);
+					term += pos.head(props, indexes, types);
 					if (pos.tail === null) {
 						return term;
 					} else {
@@ -11245,7 +11246,7 @@ if (typeof module !== 'undefined' && module.exports) {
 		action(
 			numberLiteral,
 			function(state) {
-				return function(/*props, indexes*/) {
+				return function(/*props, indexes, types*/) {
 					return parseFloat(state.head);
 				};
 			}
@@ -11253,8 +11254,8 @@ if (typeof module !== 'undefined' && module.exports) {
 		action(
 			sequence([token('floor('), additiveExpression, token(')')]),
 			function(state) {
-				return function(props, indexes) {
-					var res = state.head(props, indexes);
+				return function(props, indexes, types) {
+					var res = state.head(props, indexes, types);
 					return Math.floor(res);
 				};
 			}
@@ -11278,8 +11279,8 @@ if (typeof module !== 'undefined' && module.exports) {
 		action(
 			whitespaceSeparatedSequence([token('-'), multiplicativeTerm]),
 			function(state) {
-				return function(props, indexes) {
-					return -state.head(props, indexes);
+				return function(props, indexes, types) {
+					return -state.head(props, indexes, types);
 				};
 			}
 		)
@@ -11292,11 +11293,11 @@ if (typeof module !== 'undefined' && module.exports) {
 		),
 		function(state)
 		{
-			return function(props, indexes) {
+			return function(props, indexes, types) {
 				var pos = state;
 				var term = 1.0;
 				while (pos !== null) {
-					term *= pos.head(props, indexes);
+					term *= pos.head(props, indexes, types);
 					if (pos.tail === null) {
 						return term;
 					} else {
@@ -11314,8 +11315,8 @@ if (typeof module !== 'undefined' && module.exports) {
 		action(
 			whitespaceSeparatedSequence([token('-'), multiplicativeTerm]),
 			function(state) {
-				return function(props, indexes) {
-					return -state.head(props, indexes);
+				return function(props, indexes, types) {
+					return -state.head(props, indexes, types);
 				};
 			}
 		)
@@ -14042,6 +14043,16 @@ var gmxAPIutils = {
         return out;
     },
 
+    getUnixTimeFromStr: function(st) {
+		var arr = L.Util.trim(st).split(' ');
+		arr = arr[0].split('.');
+
+        if (arr[2].length === 4) {
+			arr = arr.reverse();
+		}
+		return Date.UTC(arr[0], arr[1] - 1, arr[2]) / 1000;
+    },
+
     getDateFromStr: function(st) {
 		var arr = L.Util.trim(st).split(' ');
 		arr = arr[0].split('.');
@@ -14403,6 +14414,7 @@ L.extend(L.gmxUtil, {
     getGeometryBounds: gmxAPIutils.getGeometryBounds,
     tileSizes: gmxAPIutils.tileSizes,
     getDateFromStr: gmxAPIutils.getDateFromStr,
+    getUnixTimeFromStr: gmxAPIutils.getUnixTimeFromStr,
     getUTCdate: gmxAPIutils.getUTCdate,
     getUTCtime: gmxAPIutils.getUTCtime,
     getUTCdateTime: gmxAPIutils.getUTCdateTime,
@@ -19669,6 +19681,7 @@ StyleManager.prototype = {
     getCurrentFilters: function(propArray, zoom) {
         var gmx = this.gmx,
             indexes = gmx.tileAttributeIndexes,
+            types = gmx.tileAttributeTypes,
             z = zoom || 1,
             out = [];
 
@@ -19678,7 +19691,7 @@ StyleManager.prototype = {
         for (var i = 0, len = this._styles.length; i < len; i++) {
             var st = this._styles[i];
             if (z > st.MaxZoom || z < st.MinZoom
-                || (st.filterFunction && !st.filterFunction(propArray, indexes))) {
+                || (st.filterFunction && !st.filterFunction(propArray, indexes, types))) {
                 continue;
             }
             out.push(i);
@@ -23279,6 +23292,8 @@ L.Map.addInitHook(function() {
     var map = this,
         hideControl = null,
         hiddenClass = 'leaflet-control-gmx-hidden',
+		// defaultSvgSprites = ['http://www.kosmosnimki.ru/lib/geomixer/img/svg-symbols.svg'],
+		defaultSvgSprites = ['img/svg-symbols.svg'],
         DEFAULT = ['gmxLoaderStatus', 'gmxHide', 'gmxZoom', 'gmxDrawing', 'gmxBottom', 'gmxLocation', 'gmxCopyright', 'gmxCenter', 'gmxLogo'];
 
     this.gmxControlsManager = {
@@ -23310,6 +23325,9 @@ L.Map.addInitHook(function() {
         },
         init: function(options) {
             options = options || {};
+            if (map.options.svgSprite !== false) {
+				this.setSvgSprites(map.options.svgSprite);
+            }
             if (map.zoomControl && !options.zoomControl) {
                 map.removeControl(map.zoomControl);
             }
@@ -23321,6 +23339,22 @@ L.Map.addInitHook(function() {
                     map.addControl(L.control[key](options[key]));
                 }
 			});
+            return this;
+        },
+        setSvgSprites: function(arr) {
+			arr = arr && arr !== true ? (L.Util.isArray(arr) ? arr : [arr]) : defaultSvgSprites;
+			arr.forEach(function(url) {
+				var ajax = new XMLHttpRequest();
+				ajax.open('GET', url, true);
+				ajax.send();
+				ajax.onload = function() {
+				  var div = document.createElement('div');
+				  div.style.display = 'none';
+				  div.innerHTML = ajax.responseText;
+				  document.body.insertBefore(div, document.body.childNodes[0]);
+				}
+			});
+			map.options.svgSprite = arr;
             return this;
         }
     };
@@ -23647,8 +23681,15 @@ L.Control.GmxIconGroup = L.Control.GmxIcon.extend({
                 setTimeout(function() { bg.width = container.clientWidth; }, 0);
             }
             if (options.isCollapsible) {
-                this.triangle = L.DomUtil.create('div', 'triangle',  container);
-                this.triangle.width = this.triangle.height = ICONSIZE;
+				if (svgSprite) {
+					this.triangle = L.DomUtil.create('div', 'triangleSvg',  container);
+					this.triangle.innerHTML = '<svg role="img" class="svgIcon">\
+						<use xlink:href="#arrow-down"></use>\
+						</svg>';
+				} else {
+					this.triangle = L.DomUtil.create('div', 'triangle leaflet-gmx-icon-sprite',  container);
+					this.triangle.width = this.triangle.height = ICONSIZE;
+				}
             }
         }
 
@@ -28830,24 +28871,34 @@ L.Map.ContextMenu = L.Handler.extend({
 	},
 
 	addHooks: function () {
+        var container = this._map.getContainer();
+        
 		L.DomEvent
-		    .on(document, (L.Browser.touch ? this._touchstart : 'mousedown'), this._onMouseDown, this)
+            .on(container, 'mouseleave', this._hide, this)
 			.on(document, 'keydown', this._onKeyDown, this);
 
+        if (L.Browser.touch) {
+            L.DomEvent.on(document, this._touchstart, this._hide, this);
+        }
+        
 		this._map.on({
 			contextmenu: this._show,
 			mousedown: this._hide,
 			movestart: this._hide,
 			zoomstart: this._hide
 		}, this);
-
-        L.DomEvent.on(this._map.getContainer(), 'mouseleave', this._hide, this);
 	},
 
 	removeHooks: function () {
+        var container = this._map.getContainer();
+        
 		L.DomEvent
-			.off(document, (L.Browser.touch ? this._touchstart : 'mousedown'), this._onMouseDown, this)
+            .off(container, 'mouseleave', this._hide, this)			
 			.off(document, 'keydown', this._onKeyDown, this);
+
+        if (L.Browser.touch) {
+            L.DomEvent.off(document, this._touchstart, this._hide, this);
+        }        
 
 		this._map.off({
 			contextmenu: this._show,
@@ -28855,8 +28906,6 @@ L.Map.ContextMenu = L.Handler.extend({
 			movestart: this._hide,
 			zoomstart: this._hide
 		}, this);
-
-        L.DomEvent.off(this._map.getContainer(), 'mouseleave', this._hide, this);
 	},
 
 	showAt: function (point, data) {
@@ -29003,6 +29052,10 @@ L.Map.ContextMenu = L.Handler.extend({
 			.on(el, 'mousedown', L.DomEvent.stopPropagation)
 			.on(el, 'click', callback);
 
+        if (L.Browser.touch) {
+            L.DomEvent.on(el, this._touchstart, L.DomEvent.stopPropagation);
+        }
+
 		return {
 			id: L.Util.stamp(el),
 			el: el,
@@ -29028,6 +29081,10 @@ L.Map.ContextMenu = L.Handler.extend({
 						.off(el, 'mouseover', this._onItemMouseOut, this)
 						.off(el, 'mousedown', L.DomEvent.stopPropagation)
 						.off(el, 'click', callback);
+
+                    if (L.Browser.touch) {
+                        L.DomEvent.off(el, this._touchstart, L.DomEvent.stopPropagation);
+                    }
 				}
 				
 				this._container.removeChild(el);
@@ -29188,10 +29245,6 @@ L.Map.ContextMenu = L.Handler.extend({
 		return size;
 	},
 
-	_onMouseDown: function (e) {
-		this._hide();
-	},
-
 	_onKeyDown: function (e) {
 		var key = e.keyCode;
 
@@ -29224,6 +29277,29 @@ L.Mixin.ContextMenu = {
 		this.off('contextmenu', this._showContextMenu, this);
 
 		return this;
+	},
+
+	addContextMenuItem: function (item) {
+			this.options.contextmenuItems.push(item);
+	},
+
+	removeContextMenuItemWithIndex: function (index) {
+		  var items = [];
+			for (var i = 0; i < this.options.contextmenuItems.length; i++) {
+					if(this.options.contextmenuItems[i].index == index){
+							items.push(i);
+					}
+			}
+			var elem = items.pop();
+			while (elem !== undefined) {
+				  this.options.contextmenuItems.splice(elem,1);
+					elem = items.pop();
+		  }
+	},
+
+	replaceConextMenuItem: function (item) {
+		  this.removeContextMenuItemWithIndex(item.index);
+		  this.addContextMenuItem(item);
 	},
 
 	_initContextMenu: function () {
@@ -31932,5 +32008,7 @@ L.gmx.addLayerClass('WMS', GmxVirtualWMSLayer);
 })();
 
 
-
+L.Map.addInitHook(function() {
+	this.gmxControlsManager.setSvgSprites('http://www.kosmosnimki.ru/lib/geomixer/img/svg-symbols.svg');
+});
 }());

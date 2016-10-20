@@ -16,7 +16,7 @@ function outBuild(name, js, css, type) {
 		var buildDate = new Date().toLocaleString(),
 			// prefix = '(function () {\n\'use strict\';\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
 			prefix = '(function () {\nvar define = null;\nvar buildDate = \'' + buildDate + '\';\nvar buildUUID = \'' + buildUUID + '\';\n',
-			postfix = '\n}());\n';
+			postfix = 'L.Map.addInitHook(function() {\n	this.gmxControlsManager.setSvgSprites(\'http://www.kosmosnimki.ru/lib/geomixer/img/svg-symbols.svg\');\n});\n}());\n';
 
 		if (type !== 'dev') {
 			fs.writeFileSync(name + '.js', prefix + UglifyJS.minify(js, {warnings: true, fromString: true}).code + postfix);

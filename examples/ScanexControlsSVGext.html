@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>GmxControls Leaflet Quick Start Guide Example</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet-src.js"></script>
+
+    <link rel="stylesheet" href="../dist/geomixer.css" />
+	<script src="../dist/geomixer-src.js?key=U92596WMIH"></script>
+
+    <script src="http://rowanwins.github.io/leaflet-easyPrint/dist/leaflet.easyPrint.js"></script>
+
+    <style>
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+        }
+		.leaflet-gmx-icon-save-map > span, .leaflet-gmx-icon-vector > span, .leaflet-gmx-icon-raster > span {
+			color: black;
+		}
+		.leaflet-gmx-icon-save-map, .leaflet-gmx-icon-vector, .leaflet-gmx-icon-raster {
+			background-color: white;
+		}
+		.leaflet-gmx-icon-save-map:hover, .leaflet-gmx-icon-vector:hover, .leaflet-gmx-icon-raster:hover {
+			background-color: #eee;
+		}
+
+        @media print {
+            @page { 
+                size: landscape;
+            }
+        }
+
+        
+    </style>
+</head>
+<body>
+	<div id="map"></div>
+
+	<script>
+		var map = new L.Map('map', {
+			layers: [],
+			center: new L.LatLng(62.955223, 57.128906),
+			attributionControl: false,
+			zoomControl: false,
+			//svgSprite: '../dist/css/img/svg-symbols.svg',
+			zoom: 3
+		});
+
+        var blm = map.gmxBaseLayersManager;
+        blm.initDefaults().then(function() {
+            var baseLayers = ['OSM'],
+                currentID = baseLayers[0];
+            blm.setActiveIDs(baseLayers).setCurrentID(currentID);
+        });
+        L.control.gmxLayers(blm).addTo(map)
+
+        var controlsManager = map.gmxControlsManager;
+        controlsManager
+			//.setSvgSprites('../dist/css/img/svg-symbols.svg')
+			.init(
+				{
+					//gmxDrawing: {items: ['Polyline', 'Point', 'Polygon']}
+					//gmxLocation: {scaleFormat: 'text'}
+					//gmxHide: {isActive: false}
+					//gmxLogo: null
+				}
+			);
+        map.addControl(L.control.gmxIcon({
+            id: 'save-map',
+            text: 'Сохранить',
+            title: 'Сохранить объекты'
+         })
+        );
+
+        var myGroupControl2 = L.control.gmxIconGroup({
+            id: 'myGroupTextControl2',
+            singleSelection: true,
+            isSortable: true,
+            width: 'auto',
+            items: [
+                L.control.gmxIcon({
+                    id: 'vector',
+                    text: 'Редактировать',
+                    title: 'Редактировать объект'
+                }),
+                L.control.gmxIcon({
+                    id: 'raster',
+                    text: 'Сохранить',
+                    title: 'Сохранить объекты'
+                })
+            ]
+        });
+        map.addControl(myGroupControl2);
+
+        L.gmxLocale.addText({
+            eng: {
+                edit: 'Edit',
+                print: 'Print',
+                permalink: 'Link to the map',
+                boxZoom: 'BoxZoom'
+            },
+            rus: {
+                edit: 'Редактировать',
+                print: 'Печать',
+                permalink: 'Пермалинк',
+                boxZoom: 'Увеличение'
+            }
+        });
+
+        var myGroupControl1 = L.control.gmxIconGroup({
+            id: 'myGroupControl1',
+            items: [
+                L.control.gmxIcon({
+                    id: 'edittool',
+                    title: L.gmxLocale.getText('edit'),
+                    togglable: true
+					// ,
+                    // regularImageUrl: 'img/project_tool.png',
+                    // activeImageUrl: 'img/project_tool_a.png'
+                })
+                .on('statechange', function (ev) {
+                    console.log('editVectorObject1', ev);
+                })
+                ,
+                L.control.gmxIcon({
+                    id: 'info-zone',
+                    togglable: true,
+                    title: L.gmxLocale.getText('boxZoom'),
+                    onAdd: function (control) {
+                        //console.log('onAdd', this, arguments);
+                        var _onMouseDown = map.boxZoom._onMouseDown;
+                        map.boxZoom._onMouseDown = function (e) {
+                            _onMouseDown.call(map.boxZoom, {
+                                clientX: e.clientX,
+                                clientY: e.clientY,
+                                which: 1,
+                                shiftKey: true
+                            });
+                        };
+                        map.on('boxzoomend', function () {
+                            map.dragging.enable();
+                            map.boxZoom.removeHooks();
+                            control.setActive(false);
+                        });
+                    }
+                  })
+                  .on('statechange', function (ev) {
+                    //console.log('boxzoom', ev);
+                    var control = ev.target;
+                    if (control.options.isActive) {
+                        map.dragging.disable();
+                        map.boxZoom.addHooks();
+                    } else {
+                        map.dragging.enable();
+                        map.boxZoom.removeHooks();
+                    }
+                 })
+            ]
+        });
+        map.addControl(myGroupControl1);
+        map
+            .addControl(L.control.gmxIcon({
+                id: 'gmxprint',
+                title: L.gmxLocale.getText('print')
+             })
+              .on('click', function (ev) {
+                console.log('print', ev);
+                window.print();
+              })
+            )
+            .addControl(L.control.gmxIcon({
+                id: 'permalink',
+                title: L.gmxLocale.getText('permalink')
+             })
+              .on('statechange', function (ev) {
+                console.log('permalink', ev);
+              })
+            );
+
+        var prefix = 'http://maps.kosmosnimki.ru/GetImage.ashx?usr=khaibrik%40scanex.ru&img='
+        var items = [
+/*
+            L.control.gmxIcon({
+                id: 'addObject3',
+                title: 'Добавить новый объект 3',
+                regularImageUrl: prefix + 'sled_walf.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject4',
+                title: 'Добавить новый объект 4',
+                regularImageUrl: prefix + 'logovo_walf.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+			,
+            L.control.gmxIcon({
+                id: 'addObject5',
+                title: 'Добавить новый объект 5',
+                togglable: true,
+                regularImageUrl: prefix + 'polygon_walf.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject6',
+                title: 'Добавить новый объект 6',
+                togglable: true,
+                regularImageUrl: prefix + 'sled_beer.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject7',
+                title: 'Добавить новый объект 7',
+                togglable: true,
+                regularImageUrl: prefix + 'polygon_beer.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'addObject8',
+                title: 'Добавить новый объект 8',
+                togglable: true,
+                regularImageUrl: prefix + 'zmu.png'
+            })
+            .on('click', function (ev) {
+                    console.log('click', arguments);
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+*/
+            L.control.gmxIcon({
+                id: 'gmxprint',
+                //id: 'addObject9',
+                title: 'Добавить новый объект 9',
+                togglable: true
+				// ,
+                // regularImageUrl: prefix + 'days.png'
+            })
+            .on('click', function (ev) {
+				console.log('click', this, arguments);
+				var cont = L.DomUtil.create('div', 'dialogContainer');
+
+            }, this)
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+            ,
+            L.control.gmxIcon({
+                id: 'gridTool',
+                title: 'Добавить новый объект 10',
+                togglable: false,
+				skipCollapse: true
+				// ,
+                // regularImageUrl: prefix + 'test.png'
+            })
+            .on('click', function (ev) {
+				console.log('clickddd', this, arguments);
+				var cont = L.DomUtil.create('div', 'dialogContainer');
+            })
+            .on('statechange', function (ev) {
+                    console.log('statechange', arguments, ev.target.options.isActive);
+            })
+        ];
+        var myGroupControl = L.control.gmxIconGroup({
+            id: 'myGroupControl',
+            addBefore: 'boxzoom',
+			//isCollapsible: false,
+            //singleSelection: true,
+            //isSortable: true,
+            items: items
+        });
+        map.addControl(myGroupControl);
+		//myGroupControl.options.isCollapsible = true;
+		myGroupControl._minimize();
+       
+	</script>
+</body>
+</html>
