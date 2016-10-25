@@ -1,7 +1,7 @@
 (function () {
 var define = null;
-var buildDate = '2016-10-20 16:00:57';
-var buildUUID = '75c93d0dd2ad49c69a1e53d9cff04771';
+var buildDate = '2016-10-25 10:06:36';
+var buildUUID = '692173572d2a4d9da294b0dbf768b483';
 (function(self) {
   'use strict';
 
@@ -28454,6 +28454,7 @@ L.DomUtil.TRANSFORM_ORIGIN = L.DomUtil.testProp(
         };
 
         var getURL = function(type) {
+            // return 'http://{s}.tile.osm.kosmosnimki.ru/' + type + '/{z}/{x}/{y}.png';
             return 'http://{s}.tile.cart.kosmosnimki.ru/' + type + '/{z}/{x}/{y}.png';
         };
         var iconPrefix = 'http://maps.kosmosnimki.ru/api/img/baseLayers/';
@@ -28574,7 +28575,8 @@ L.DomUtil.TRANSFORM_ORIGIN = L.DomUtil.testProp(
                 eng: 'Print Map',
                 icon: iconPrefix + 'basemap_print.png',
                 layers: [
-                    L.tileLayer(getURL('bw' + (lang === 'rus' ? '' : '-en')), {
+					L.tileLayer('http://{s}.tile.osm.kosmosnimki.ru/bw' + (lang === 'rus' ? '' : '-en') + '/{z}/{x}/{y}.png', {
+                    // L.tileLayer(getURL('bw' + (lang === 'rus' ? '' : '-en')), {
                         // maxZoom: 25,
                         maxNativeZoom: 18,
                         gmxCopyright: getCopyright2()
@@ -28621,7 +28623,7 @@ L.DomUtil.TRANSFORM_ORIGIN = L.DomUtil.testProp(
             overlayColor: '#ffffff',
             icon: 'http://maps.kosmosnimki.ru/api/img/baseLayers/basemap_osm_hybrid.png',
             layers: [
-                L.tileLayer(getURL('kosmohyb' + (lang === 'rus' ? '' : '-en')), {
+                L.tileLayer('http://{s}.tile.osm.kosmosnimki.ru/kosmohyb' + (lang === 'rus' ? '' : '-en') + '/{z}/{x}/{y}.png', {
                     // maxZoom: 25,
                     maxNativeZoom: 18,
                     gmxCopyright: getCopyright2()
@@ -28719,7 +28721,8 @@ L.DomUtil.TRANSFORM_ORIGIN = L.DomUtil.testProp(
                 rus: 'Ночная', eng: 'OSM Night',
                 icon: iconPrefix + 'basemap_night.png',
                 layers:[
-                    L.tileLayer(getURL('night'), {
+					L.tileLayer('http://{s}.tile.osm.kosmosnimki.ru/night/{z}/{x}/{y}.png', {
+                    // L.tileLayer(getURL('night'), {
                         maxZoom: 18,
                         gmxCopyright: getCopyright2()
                     })
