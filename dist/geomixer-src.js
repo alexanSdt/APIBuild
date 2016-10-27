@@ -1,7 +1,7 @@
 (function () {
 var define = null;
-var buildDate = '2016-10-25 16:07:09';
-var buildUUID = 'b4970a63fae042c593763858867396b4';
+var buildDate = '2016-10-27 12:01:33';
+var buildUUID = '489e30979db14cb58542a604d4121f0e';
 (function(self) {
   'use strict';
 
@@ -16917,6 +16917,11 @@ var DataManager = L.Class.extend({
         if (this.processingTile) {
             newTilesList[this.processingTile.vectorTileKey] = true;
         }
+        if (this._rasterVectorTile) {
+			key = this._rasterVectorTile.vectorTileKey;
+            newTilesList[key] = true;
+			this._tiles[key] = {tile: this._rasterVectorTile};
+		}
 
         var checkSubscription = function(vKey) {
             var observerIds = _this._observerTileLoader.getTileObservers(vKey);
@@ -21241,7 +21246,8 @@ L.gmx.RasterLayer = L.gmx.VectorLayer.extend(
             }
 			callback(objects, [bounds.min.x, bounds.min.y, bounds.max.x, bounds.max.y]);
 		}};
-		gmx.dataManager.addTile(new VectorTile(vectorDataProvider, {x: -0.5, y: -0.5, z: 0, v: 0, s: -1, d: -1}));
+		gmx.dataManager._rasterVectorTile = new VectorTile(vectorDataProvider, {x: -0.5, y: -0.5, z: 0, v: 0, s: -2, d: -2});
+		gmx.dataManager.addTile(gmx.dataManager._rasterVectorTile);
 
         return this;
     },
@@ -25452,9 +25458,10 @@ L.Control.GmxLoaderStatus = L.Control.extend({
     options: {
         id: 'loaderStatus',
         position: 'topleft',
-        type: 'gif' // 'font'
+        type: 'gif' // 'gif' 'font'
     },
     _items: {},
+    _text: 'Loader status',
 
     addItem: function (id, type) {
         var itemId = id || L.gmxUtil.newId(),
@@ -25469,6 +25476,8 @@ L.Control.GmxLoaderStatus = L.Control.extend({
         } else {
             this._items[itemId] = 1;
         }
+		this._container.title = this._text + ': ' + Object.keys(this._items).length;
+
         return itemId;
     },
 
@@ -25483,6 +25492,7 @@ L.Control.GmxLoaderStatus = L.Control.extend({
             if (this.options.type !== 'gif') { L.DomUtil.removeClass(this._div, 'animate-spin'); }
             L.DomUtil.addClass(this._container, 'leaflet-gmx-visibility-hidden');
         }
+		this._container.title = this._text + ': ' + Object.keys(this._items).length;
     },
 
     onRemove: function (map) {
@@ -25508,7 +25518,7 @@ L.Control.GmxLoaderStatus = L.Control.extend({
         }
 
         container._id = this.options.id;
-        container.title = txt;
+        container.title = this._text = txt;
 
         this._container = container;
         this._div = div;
@@ -25523,6 +25533,12 @@ L.Control.GmxLoaderStatus = L.Control.extend({
         L.gmxUtil.loaderStatus = function(id, removeFlag, type) {
             return _this[removeFlag ? 'removeItem' : 'addItem'].apply(_this, [id, type]);
         };
+		L.DomEvent
+			.on(container, 'click', L.DomEvent.stopPropagation)
+			.on(container, 'click', function() {
+				var arr = Object.keys(this._items);
+				console.info('Запросов в очереди на загрузку:', arr.length, arr);
+			}, this);
         return container;
     }
 });
